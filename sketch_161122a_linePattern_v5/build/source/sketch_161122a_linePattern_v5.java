@@ -213,12 +213,23 @@ public void cross() {
 
 public void circle() {
   // Perfekten Kreis zeichnen
-  if (uWidth < uHeight) {
-    float rW = random(uWidth/6, uWidth/2);
-    arc(x+uWidth/2, y+uHeight/2, rW, rW, 0, PI);
+
+  // PATTERN
+  choose = round(random(1));
+  if (choose == 0) {
+    float circleSize = random((uWidth + uHeight) / 2);
+    ellipse(x+uWidth/2, y+uHeight/2, circleSize/2, circleSize/2);
   } else {
-    float rH = random(uHeight/6, uHeight/2);
-    arc(x+uWidth/2, y+uHeight/2, rH, rH, 0, PI);
+    // Radius auf 90 Grad Winkel beschr\u00e4nken
+    float arcStart = map(PApplet.parseInt(random(4)), 0, 4, 0, 360);
+    float arcEnd = map(PApplet.parseInt(random(4)), 0, 4, 0, 360);
+    if (uWidth < uHeight) {
+      float rW = random(uWidth/6, uWidth/2);
+      arc(x+uWidth/2, y+uHeight/2, rW, rW, radians(arcStart), radians(arcEnd), PIE);
+    } else {
+      float rH = random(uHeight/6, uHeight/2);
+      arc(x+uWidth/2, y+uHeight/2, rH, rH, radians(arcStart), radians(arcEnd), PIE);
+    }
   }
 }
 
