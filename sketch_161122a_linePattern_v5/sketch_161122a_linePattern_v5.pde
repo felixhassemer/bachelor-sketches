@@ -20,7 +20,7 @@ int uHmin = 25;
 int uHmax = 120;
 int uWidth = round(random(20, 60));
 int uHeight = round(random(20, 60));
-
+int zufallszahl = random(10);
 // STYLING
 color sColor = color(0),
       fColor = color(0),
