@@ -21,8 +21,6 @@ int uHmax = 120;
 int uWidth = round(random(20, 60));
 int uHeight = round(random(20, 60));
 
-// DAS IST EIN GITHUB TEST
-
 // STYLING
 color sColor = color(0),
       fColor = color(0),
