@@ -1,5 +1,23 @@
+import processing.core.*; 
+import processing.data.*; 
+import processing.event.*; 
+import processing.opengl.*; 
+
+import processing.pdf.*; 
+
+import java.util.HashMap; 
+import java.util.ArrayList; 
+import java.io.File; 
+import java.io.BufferedReader; 
+import java.io.PrintWriter; 
+import java.io.InputStream; 
+import java.io.OutputStream; 
+import java.io.IOException; 
+
+public class sketch_161122a_linePattern_v6 extends PApplet {
+
 // LIBRARIES
-import processing.pdf.*;
+
 int pageCount = 0;
 int pageMax = 100;
 boolean pdfRender = false;
@@ -11,7 +29,7 @@ int xTrans = 20;
 
 // NOISE
 float xoff = 0;
-float incr = 0.05;
+float incr = 0.05f;
 
 // UNITS
 int uWmin = 15;
@@ -22,14 +40,14 @@ int uWidth = round(random(20, 60));
 int uHeight = round(random(20, 60));
 
 // STYLING
-color sColor = color(0),
+int sColor = color(0),
       fColor = color(0),
       bgndColor = color(255);
 int sWeight = 3;
 
 // ----------------------------------------------------------
 
-void settings()
+public void settings()
 {
   if (pdfRender) {
     size(800, 800, PDF, "linepattern#####.pdf");
@@ -40,7 +58,7 @@ void settings()
 
 // ----------------------------------------------------------
 
-void setup()
+public void setup()
 {
   background(bgndColor);
   frameRate(20);
@@ -48,9 +66,9 @@ void setup()
 
 // ---------------------------------------------------------
 
-void draw()
+public void draw()
 {
-  translate(20, 0);
+  translate(xTrans, 0);
   // PDF renderer
   if (pdfRender) {
     PGraphicsPDF pdf = (PGraphicsPDF) g;
@@ -65,13 +83,13 @@ void draw()
     cross();
   } else if (choose < 40) {
     shapeDraw();
-  } else if(choose < 43) {
+  } else if(choose < 45) {
     circle();
   } else if(choose < 55) {
     diagLine2();
-  } else if(choose < 60) {
-    diagLine();
   } else if(choose < 65) {
+    diagLine();
+  } else if(choose < 75) {
     dotGrid();
   } else if(choose < 100) {
     space();
@@ -82,7 +100,7 @@ void draw()
   xoff += incr;
   uWidth = round(random(uWmin, uWmax));
 
-  // Überlauf in nächste Zeile
+  // \u00dcberlauf in n\u00e4chste Zeile
   if (x + uWidth >= width-xTrans) {
     x = 0;
     // random Unitsize
@@ -107,12 +125,12 @@ void draw()
     }
   } else {
     // Seite scrollen
-    // nächste Zeile leeren
+    // n\u00e4chste Zeile leeren
     if (y + uHeight >= height) {
       copy(0, 0, width, y, 0, -uHeight, width, y);
       fill(bgndColor);
       noStroke();
-      rect(0, y-uHeight, width, uHmax);
+      rect(0-xTrans, y-uHeight, width, uHmax);
       y = y-uHeight;
     }
   }
@@ -121,7 +139,7 @@ void draw()
 
 // ----------------------------------------------------------
 
-void diagLine() {
+public void diagLine() {
   // STYLING
   stroke(sColor);
   strokeWeight(sWeight);
@@ -138,7 +156,7 @@ void diagLine() {
   }
 }
 
-void shapeDraw() {
+public void shapeDraw() {
   // STYLING
   fill(fColor);
   noStroke();
@@ -153,7 +171,7 @@ void shapeDraw() {
   }
 }
 
-void diagLine2() {
+public void diagLine2() {
   // STYLING
   stroke(sColor);
   strokeWeight(sWeight);
@@ -180,7 +198,7 @@ void diagLine2() {
   }
 }
 
-void cross() {
+public void cross() {
   // STYLING
   stroke(sColor);
   strokeWeight(sWeight);
@@ -193,44 +211,55 @@ void cross() {
   line(x+uWidth/5, y+(uHeight-uHeight/5), x+(uWidth-uWidth/5), y+uHeight/5);
 }
 
-void circle() {
+public void circle() {
   // Perfekten Kreis zeichnen
 
   // PATTERN
   choose = round(random(1));
-  if (choose == 0) {
-    float circleSize = random((uWidth + uHeight) / 2);
+  float circleSize = random(10, (uWidth + uHeight)/2);
+  if (choose == 1) {
     ellipse(x+uWidth/2, y+uHeight/2, circleSize/2, circleSize/2);
   } else {
-    // Radius auf 90 Grad Winkel beschränken
-    float arcStart = map(int(random(4)), 0, 4, 0, 360);
-    float arcEnd = map(int(random(4)), 0, 4, 0, 360);
+    // Radius auf 90 Grad Winkel beschr\u00e4nken
+    // nur halbe Kreise
+    float arcStart =  radians(map(PApplet.parseInt(random(2)), 0, 2, 0, 360));
+    float arcEnd =    radians(map(PApplet.parseInt(random(2)), 0, 2, 0, 360));
+    float arcOffset = radians(map(PApplet.parseInt(random(4)), 0, 4, 0, 360));
     if (uWidth < uHeight) {
       float rW = random(uWidth/6, uWidth/2);
-      arc(x+uWidth/2, y+uHeight/2, rW, rW, radians(arcStart), radians(arcEnd), PIE);
+      arc(x+uWidth/2, y+uHeight/2, circleSize, circleSize, arcStart+arcOffset, arcEnd+arcOffset, PIE);
     } else {
       float rH = random(uHeight/6, uHeight/2);
-      arc(x+uWidth/2, y+uHeight/2, rH, rH, radians(arcStart), radians(arcEnd), PIE);
+      arc(x+uWidth/2, y+uHeight/2, rH, rH, arcStart+arcOffset, arcEnd+arcOffset, PIE);
     }
   }
 }
 
-void space() {
+public void space() {
 }
 
-void dotGrid() {
+public void dotGrid() {
   // STYLING
   stroke(sColor);
   strokeWeight(sWeight);
   strokeCap(ROUND);
   strokeJoin(ROUND);
   noFill();
-
+  int dotDensity = PApplet.parseInt(random(3, 10));
   // Punktraster zeichnen
-  for (int i = 1; i < 10; i++) {
-    for (int j = 1; j < 10; j++) {
+  for (int i = 1; i < dotDensity; i++) {
+    for (int j = 1; j < dotDensity; j++) {
       // println(i, j);
-      point(x+(i*(uWidth/10)), y+(j*(uHeight/10)));
+      point(x+(i*(uWidth/dotDensity)), y+(j*(uHeight/dotDensity)));
+    }
+  }
+}
+  static public void main(String[] passedArgs) {
+    String[] appletArgs = new String[] { "sketch_161122a_linePattern_v6" };
+    if (passedArgs != null) {
+      PApplet.main(concat(appletArgs, passedArgs));
+    } else {
+      PApplet.main(appletArgs);
     }
   }
 }
