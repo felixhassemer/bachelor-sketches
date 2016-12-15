@@ -48,7 +48,7 @@ void settings()
 void setup()
 {
   background(bgndColor);
-  frameRate(20);
+  frameRate(200);
 }
 
 // ---------------------------------------------------------
@@ -67,21 +67,21 @@ void draw()
 
   // PATTERNS mischen!
   if (choose < 15) {
-    cross();
-  } else if (choose < 25) {
-    horizontLines();
-  } else if (choose < 40) {
-    shapeDraw();
-  } else if(choose < 45) {
-    circle();
-  } else if(choose < 60) {
-    diagLine2();
-  } else if(choose < 70) {
-    diagLine();
-  } else if(choose < 75) {
-    dotGrid();
-  } else if(choose < 85) {
-    space();
+    // cross();
+  // } else if (choose < 25) {
+  //   horizontLines();
+  // } else if (choose < 40) {
+  //   shapeDraw();
+  // } else if(choose < 45) {
+  //   circle();
+  // } else if(choose < 60) {
+  //   diagLine2();
+  // } else if(choose < 70) {
+  //   diagLine();
+  // } else if(choose < 75) {
+  //   dotGrid();
+  // } else if(choose < 85) {
+  //   space();
   } else if(choose < 100) {
     sineWave();
   }
@@ -186,19 +186,23 @@ void sineWave() {
   strokeCap(SQUARE);
   strokeJoin(ROUND);
   noFill();
-
+  uWidth /= 10;
   // PATTERN
-
-
-  beginShape();
   float sineOff = sineStart;
-  for (int i = 0; i < uWidth; i++) {
-    float j = map(sin(sineOff), -1, 1, 0, uHeight);
-    vertex(x+i, y+j);
-    sineOff += sineIncr;
-  }
-  sineStart += incr;
-  endShape();
+
+  float j = map(sin(sineOff), -1, 1, 0, uHeight);
+  line(x, y+j*noise(xoff), x+uWidth, y+j*noise(xoff));
+  sineStart += sineIncr;
+
+  // beginShape();
+  // float sineOff = sineStart;
+  // for (int i = 0; i < uWidth; i++) {
+  //   float j = map(sin(sineOff), -1, 1, 0, uHeight);
+  //   vertex(x+i, y+j);
+  //   sineOff += sineIncr;
+  // }
+  // sineStart += incr;
+  // endShape();
 }
 
 void diagLine2() {
