@@ -31,11 +31,15 @@ int xTrans = 20;
 float xoff = 0;
 float incr = 0.05f;
 
+// sineWave
+float sineStart = 0;
+float sineIncr = 0.3f;
+
 // UNITS
 int uWmin = 10;
-int uWmax = 150;
+int uWmax = 80;
 int uHmin = 10;
-int uHmax = 180;
+int uHmax = 100;
 int uWidth = round(random(20, 60));
 int uHeight = round(random(20, 60));
 
@@ -52,8 +56,8 @@ public void settings()
   if (pdfRender) {
     size(800, 800, PDF, "linepattern#####.pdf");
   } else {
-    // size(800, 800);
-    fullScreen();
+    size(800, 800);
+    // fullScreen();
   }
 }
 
@@ -62,7 +66,7 @@ public void settings()
 public void setup()
 {
   background(bgndColor);
-  frameRate(30);
+  frameRate(20);
 }
 
 // ---------------------------------------------------------
@@ -82,6 +86,8 @@ public void draw()
   // PATTERNS mischen!
   if (choose < 15) {
     cross();
+  } else if (choose < 25) {
+    horizontLines();
   } else if (choose < 40) {
     shapeDraw();
   } else if(choose < 45) {
@@ -92,10 +98,10 @@ public void draw()
     diagLine();
   } else if(choose < 75) {
     dotGrid();
-  } else if(choose < 80) {
-    horizontLines();
-  } else if(choose < 100) {
+  } else if(choose < 85) {
     space();
+  } else if(choose < 100) {
+    sineWave();
   }
 
   // Neue Unitsize
@@ -146,7 +152,7 @@ public void diagLine() {
   // STYLING
   stroke(sColor);
   strokeWeight(sWeight);
-  strokeCap(ROUND);
+  strokeCap(SQUARE);
   strokeJoin(ROUND);
   noFill();
 
@@ -181,23 +187,43 @@ public void horizontLines() {
   strokeCap(SQUARE);
   strokeJoin(ROUND);
   noFill();
+  int lineMax = PApplet.parseInt(random(3, 6));
+  // PATTERN
+  choose = 0;
+  if (choose == 0) {
+    for (int i = 1; i <= lineMax; i++) {
+      line(x , y+i*uHeight/(lineMax+1), x+uWidth, y+i*uHeight/(lineMax+1));
+    }
+  }
+}
+
+public void sineWave() {
+  // STYLING
+  stroke(sColor);
+  strokeWeight(sWeight);
+  strokeCap(SQUARE);
+  strokeJoin(ROUND);
+  noFill();
 
   // PATTERN
-  choose = round(random(0));
-  if (choose == 0) {
-    for (int i = 0; i <= 3; i++) {
-      line(x , y+i*10, x+uWidth, y+i*10);
-    }
-  } else if (choose == 1) {
 
+
+  beginShape();
+  float sineOff = sineStart;
+  for (int i = 0; i < uWidth; i++) {
+    float j = map(sin(sineOff), -1, 1, 0, uHeight);
+    vertex(x+i, y+j);
+    sineOff += sineIncr;
   }
+  sineStart += incr;
+  endShape();
 }
 
 public void diagLine2() {
   // STYLING
   stroke(sColor);
   strokeWeight(sWeight);
-  strokeCap(ROUND);
+  strokeCap(SQUARE);
   strokeJoin(ROUND);
   noFill();
 
@@ -224,7 +250,7 @@ public void cross() {
   // STYLING
   stroke(sColor);
   strokeWeight(sWeight);
-  strokeCap(ROUND);
+  strokeCap(SQUARE);
   strokeJoin(ROUND);
   noFill();
 
@@ -238,14 +264,16 @@ public void circle() {
 
   // PATTERN
   choose = round(random(1));
+  // println(choose);
   float circleSize = random(10, (uWidth + uHeight)/2);
-  if (choose == 1) {
+  if (choose == 0) {
     ellipse(x+uWidth/2, y+uHeight/2, circleSize/2, circleSize/2);
   } else {
     // Radius auf 90 Grad Winkel beschr\u00e4nken
     // nur halbe Kreise
     float arcStart =  radians(map(PApplet.parseInt(random(2)), 0, 2, 0, 360));
     float arcEnd =    radians(map(PApplet.parseInt(random(2)), 0, 2, 0, 360));
+    // arcOffset m\u00fcsste besser organisiert werden
     float arcOffset = radians(map(PApplet.parseInt(random(4)), 0, 4, 0, 360));
     if (uWidth < uHeight) {
       float rW = random(uWidth/6, uWidth/2);
@@ -264,7 +292,7 @@ public void dotGrid() {
   // STYLING
   stroke(sColor);
   strokeWeight(sWeight);
-  strokeCap(ROUND);
+  strokeCap(SQUARE);
   strokeJoin(ROUND);
   noFill();
   int dotDensity = PApplet.parseInt(random(3, 10));
