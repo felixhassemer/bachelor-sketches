@@ -14,10 +14,10 @@ float xoff = 0;
 float incr = 0.05;
 
 // UNITS
-int uWmin = 15;
-int uWmax = 100;
-int uHmin = 25;
-int uHmax = 120;
+int uWmin = 10;
+int uWmax = 150;
+int uHmin = 10;
+int uHmax = 180;
 int uWidth = round(random(20, 60));
 int uHeight = round(random(20, 60));
 
@@ -34,7 +34,8 @@ void settings()
   if (pdfRender) {
     size(800, 800, PDF, "linepattern#####.pdf");
   } else {
-    size(800, 800);
+    // size(800, 800);
+    fullScreen();
   }
 }
 
@@ -43,7 +44,7 @@ void settings()
 void setup()
 {
   background(bgndColor);
-  frameRate(20);
+  frameRate(30);
 }
 
 // ---------------------------------------------------------
@@ -61,18 +62,20 @@ void draw()
   // println(choose);
 
   // PATTERNS mischen!
-  if (choose < 20) {
+  if (choose < 15) {
     cross();
   } else if (choose < 40) {
     shapeDraw();
   } else if(choose < 45) {
     circle();
-  } else if(choose < 55) {
+  } else if(choose < 60) {
     diagLine2();
-  } else if(choose < 65) {
+  } else if(choose < 70) {
     diagLine();
   } else if(choose < 75) {
     dotGrid();
+  } else if(choose < 80) {
+    horizontLines();
   } else if(choose < 100) {
     space();
   }
@@ -150,6 +153,25 @@ void shapeDraw() {
   } else if (choose == 1) {
     triangle(x+uWidth, y, x+uWidth, y+uHeight, x, y+uHeight);
     // line(x, y + uHeight, x + uWidth, y);
+  }
+}
+
+void horizontLines() {
+  // STYLING
+  stroke(sColor);
+  strokeWeight(sWeight);
+  strokeCap(SQUARE);
+  strokeJoin(ROUND);
+  noFill();
+
+  // PATTERN
+  choose = round(random(0));
+  if (choose == 0) {
+    for (int i = 0; i <= 3; i++) {
+      line(x , y+i*10, x+uWidth, y+i*10);
+    }
+  } else if (choose == 1) {
+
   }
 }
 

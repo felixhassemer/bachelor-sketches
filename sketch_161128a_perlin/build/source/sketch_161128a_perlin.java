@@ -15,32 +15,38 @@ import java.io.IOException;
 public class sketch_161128a_perlin extends PApplet {
 
 
-float start = 0;
-float incr = 0.001f;
+float xstart = 0;
+float ystart = 1000;
+float xincr = 0.05f;
+float yincr = 0.001f;
 
 public void setup() {
   
   background(0);
-  frameRate(60);
-  strokeWeight(3);
+  frameRate(200);
+  strokeWeight(10);
   stroke(255);
   noFill();
 }
 
 public void draw() {
-  float xoff = start;
-  noiseDetail(10);
+  float xoff = xstart;
+  float yoff = ystart;
+  // noiseDetail(10);
   background(0);
 
   beginShape();
   for (int x = 0; x<width; x++) {
-    float y = map(noise(xoff), 0, 1, 0, width);
+    float scale = map(noise(yoff), 0, 1, 0, 10);
+    float y = map(sin(xoff), -1, 1, width/scale, width-width/scale);
     vertex(x, y);
-    xoff += incr;
+    xoff += xincr;
+    yoff += yincr;
   }
-  start += incr;
-
+  xstart += xincr;
+  ystart += yincr;
   endShape();
+
 
   // fill(0, 5);
   // rect(0, 0, width, height);
