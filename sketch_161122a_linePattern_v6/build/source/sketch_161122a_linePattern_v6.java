@@ -20,7 +20,7 @@ public class sketch_161122a_linePattern_v6 extends PApplet {
 
 int pageCount = 0;
 int pageMax = 100;
-boolean pdfRender = false;
+boolean pdfRender = true;
 
 // VARIABELN
 int choose = 0;
@@ -36,12 +36,12 @@ float sineStart = 0;
 float sineIncr = 0.3f;
 
 // UNITS
-int uWmin = 10;
-int uWmax = 80;
-int uHmin = 10;
-int uHmax = 100;
-int uWidth = round(random(20, 60));
-int uHeight = round(random(20, 60));
+float uWmin = 10;
+float uWmax = 200;
+float uHmin = 10;
+float uHmax = 200;
+float uWidth = round(random(uWmin, uWmax));
+float uHeight = round(random(uHmin, uHmax));
 
 // STYLING
 int sColor = color(0),
@@ -54,7 +54,7 @@ int sWeight = 3;
 public void settings()
 {
   if (pdfRender) {
-    size(800, 800, PDF, "linepattern#####.pdf");
+    size(1200, 1200, PDF, "linepattern#####.pdf");
   } else {
     // size(800, 800);
     fullScreen();
@@ -66,7 +66,7 @@ public void settings()
 public void setup()
 {
   background(bgndColor);
-  frameRate(200);
+  frameRate(60);
 }
 
 // ---------------------------------------------------------
@@ -75,9 +75,9 @@ public void draw()
 {
   translate(xTrans, 0);
   // PDF renderer
-  if (pdfRender) {
+  // if (pdfRender) {
     PGraphicsPDF pdf = (PGraphicsPDF) g;
-  }
+  // }
 
 
   choose = round(map(noise(xoff), 0, 1, 0, 100));
@@ -107,15 +107,19 @@ public void draw()
   // Neue Unitsize
   x += uWidth;
   xoff += incr;
-  uWidth = round(random(uWmin, uWmax));
+  // uWidth = round(random(uWmin, uWmax));
+  uWidth = map(noise(xoff+20000), 0, 1, uWmin, uWmax);
+  // println(uWidth);
+
 
   // \u00dcberlauf in n\u00e4chste Zeile
   if (x + uWidth >= width-xTrans) {
     x = 0;
     // random Unitsize
     y += uHeight;
-    // uWidth = round(random(uWmin, uWmax));
-    uHeight = round(random(uHmin, uHmax));
+    // uHeight = round(random(uHmin, uHmax));
+    uHeight = map(noise(xoff+10000), 0, 1, uHmin, uHmax);
+
   }
 
 
@@ -124,7 +128,7 @@ public void draw()
     if (y + uHeight >= height) {
       // PDF fertigstellen + neue Seite
       if (pageCount < pageMax) {
-        // pdf.nextPage();
+        pdf.nextPage();
         pageCount ++;
         println(pageCount);
         y = 0;
@@ -136,11 +140,11 @@ public void draw()
     // Seite scrollen
     // n\u00e4chste Zeile leeren
     if (y + uHeight >= height) {
-      copy(0, 0, width, y, 0, -uHeight, width, y);
+      copy(0, 0, width, y, 0, PApplet.parseInt(-uHeight), width, y);
       fill(bgndColor);
       noStroke();
       rect(0-xTrans, y-uHeight, width, uHmax);
-      y = y-uHeight;
+      y = y-PApplet.parseInt(uHeight);
     }
   }
 }
@@ -307,6 +311,10 @@ public void dotGrid() {
       point(x+(i*(uWidth/dotDensity)), y+(j*(uHeight/dotDensity)));
     }
   }
+}
+
+public void linefigures() {
+
 }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "sketch_161122a_linePattern_v6" };

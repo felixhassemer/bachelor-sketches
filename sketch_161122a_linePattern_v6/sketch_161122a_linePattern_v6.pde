@@ -2,7 +2,7 @@
 import processing.pdf.*;
 int pageCount = 0;
 int pageMax = 100;
-boolean pdfRender = false;
+boolean pdfRender = true;
 
 // VARIABELN
 int choose = 0;
@@ -18,12 +18,12 @@ float sineStart = 0;
 float sineIncr = 0.3;
 
 // UNITS
-int uWmin = 10;
-int uWmax = 80;
-int uHmin = 10;
-int uHmax = 100;
-int uWidth = round(random(20, 60));
-int uHeight = round(random(20, 60));
+float uWmin = 10;
+float uWmax = 200;
+float uHmin = 10;
+float uHmax = 200;
+float uWidth = round(random(uWmin, uWmax));
+float uHeight = round(random(uHmin, uHmax));
 
 // STYLING
 color sColor = color(0),
@@ -36,7 +36,7 @@ int sWeight = 3;
 void settings()
 {
   if (pdfRender) {
-    size(800, 800, PDF, "linepattern#####.pdf");
+    size(1200, 1200, PDF, "linepattern#####.pdf");
   } else {
     // size(800, 800);
     fullScreen();
@@ -48,7 +48,7 @@ void settings()
 void setup()
 {
   background(bgndColor);
-  frameRate(200);
+  frameRate(60);
 }
 
 // ---------------------------------------------------------
@@ -57,9 +57,9 @@ void draw()
 {
   translate(xTrans, 0);
   // PDF renderer
-  if (pdfRender) {
+  // if (pdfRender) {
     PGraphicsPDF pdf = (PGraphicsPDF) g;
-  }
+  // }
 
 
   choose = round(map(noise(xoff), 0, 1, 0, 100));
@@ -89,15 +89,19 @@ void draw()
   // Neue Unitsize
   x += uWidth;
   xoff += incr;
-  uWidth = round(random(uWmin, uWmax));
+  // uWidth = round(random(uWmin, uWmax));
+  uWidth = map(noise(xoff+20000), 0, 1, uWmin, uWmax);
+  // println(uWidth);
+
 
   // Überlauf in nächste Zeile
   if (x + uWidth >= width-xTrans) {
     x = 0;
     // random Unitsize
     y += uHeight;
-    // uWidth = round(random(uWmin, uWmax));
-    uHeight = round(random(uHmin, uHmax));
+    // uHeight = round(random(uHmin, uHmax));
+    uHeight = map(noise(xoff+10000), 0, 1, uHmin, uHmax);
+
   }
 
 
@@ -106,7 +110,7 @@ void draw()
     if (y + uHeight >= height) {
       // PDF fertigstellen + neue Seite
       if (pageCount < pageMax) {
-        // pdf.nextPage();
+        pdf.nextPage();
         pageCount ++;
         println(pageCount);
         y = 0;
@@ -118,11 +122,11 @@ void draw()
     // Seite scrollen
     // nächste Zeile leeren
     if (y + uHeight >= height) {
-      copy(0, 0, width, y, 0, -uHeight, width, y);
+      copy(0, 0, width, y, 0, int(-uHeight), width, y);
       fill(bgndColor);
       noStroke();
       rect(0-xTrans, y-uHeight, width, uHmax);
-      y = y-uHeight;
+      y = y-int(uHeight);
     }
   }
 }
@@ -289,4 +293,8 @@ void dotGrid() {
       point(x+(i*(uWidth/dotDensity)), y+(j*(uHeight/dotDensity)));
     }
   }
+}
+
+void linefigures() {
+
 }
