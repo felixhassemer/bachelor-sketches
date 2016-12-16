@@ -38,8 +38,8 @@ void settings()
   if (pdfRender) {
     size(800, 800, PDF, "linepattern#####.pdf");
   } else {
-    size(800, 800);
-    // fullScreen();
+    // size(800, 800);
+    fullScreen();
   }
 }
 
@@ -67,21 +67,21 @@ void draw()
 
   // PATTERNS mischen!
   if (choose < 15) {
-    // cross();
-  // } else if (choose < 25) {
-  //   horizontLines();
-  // } else if (choose < 40) {
-  //   shapeDraw();
-  // } else if(choose < 45) {
-  //   circle();
-  // } else if(choose < 60) {
-  //   diagLine2();
-  // } else if(choose < 70) {
-  //   diagLine();
-  // } else if(choose < 75) {
-  //   dotGrid();
-  // } else if(choose < 85) {
-  //   space();
+    cross();
+  } else if (choose < 25) {
+    horizontLines();
+  } else if (choose < 40) {
+    shapeDraw();
+  } else if(choose < 45) {
+    circle();
+  } else if(choose < 60) {
+    diagLine2();
+  } else if(choose < 70) {
+    diagLine();
+  } else if(choose < 75) {
+    dotGrid();
+  } else if(choose < 85) {
+    space();
   } else if(choose < 100) {
     sineWave();
   }
