@@ -26,16 +26,16 @@ int offset = 2;
 
 public void setup() {
   
-  background(255);
+  background(235, 245, 51);
   frameRate(10);
   noStroke();
   fill(0);
-  image = loadImage("kopf.jpg");
+  image = loadImage("vanessa.jpg");
   image.resize(0, 800);
 }
 
 public void draw() {
-  background(255);
+  background(235, 245, 51);
   if (mousePressed == true) {
     image(image, 0, 0);
   } else {
@@ -50,6 +50,7 @@ public void pixVerarbeitung() {
       rMod = round(random(-offset, offset));
       c = image.get(x, y);
       grayValue = 255-brightness(c);
+      fill(201, 31, 118);
       ellipse(x+rMod, y+rMod, grayValue/40, grayValue/40);
     }
   }

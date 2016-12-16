@@ -20,7 +20,7 @@ public class sketch_161122a_linePattern_v6 extends PApplet {
 
 int pageCount = 0;
 int pageMax = 100;
-boolean pdfRender = true;
+boolean pdfRender = false;
 
 // VARIABELN
 int choose = 0;
@@ -75,9 +75,9 @@ public void draw()
 {
   translate(xTrans, 0);
   // PDF renderer
-  // if (pdfRender) {
+  if (pdfRender) {
     PGraphicsPDF pdf = (PGraphicsPDF) g;
-  // }
+  }
 
 
   choose = round(map(noise(xoff), 0, 1, 0, 100));
@@ -107,8 +107,8 @@ public void draw()
   // Neue Unitsize
   x += uWidth;
   xoff += incr;
-  // uWidth = round(random(uWmin, uWmax));
-  uWidth = map(noise(xoff+20000), 0, 1, uWmin, uWmax);
+  uWidth = round(random(uWmin, uWmax));
+  // uWidth = map(noise(xoff+20000), 0, 1, uWmin, uWmax);
   // println(uWidth);
 
 
@@ -117,8 +117,8 @@ public void draw()
     x = 0;
     // random Unitsize
     y += uHeight;
-    // uHeight = round(random(uHmin, uHmax));
-    uHeight = map(noise(xoff+10000), 0, 1, uHmin, uHmax);
+    uHeight = round(random(uHmin, uHmax));
+    // uHeight = map(noise(xoff+10000), 0, 1, uHmin, uHmax);
 
   }
 
@@ -128,7 +128,7 @@ public void draw()
     if (y + uHeight >= height) {
       // PDF fertigstellen + neue Seite
       if (pageCount < pageMax) {
-        pdf.nextPage();
+        // pdf.nextPage();
         pageCount ++;
         println(pageCount);
         y = 0;
