@@ -48,7 +48,7 @@ void settings()
 void setup()
 {
   background(bgndColor);
-  frameRate(60);
+  frameRate(30);
 }
 
 // ---------------------------------------------------------
