@@ -66,7 +66,7 @@ public void settings()
 public void setup()
 {
   background(bgndColor);
-  frameRate(60);
+  frameRate(30);
 }
 
 // ---------------------------------------------------------
