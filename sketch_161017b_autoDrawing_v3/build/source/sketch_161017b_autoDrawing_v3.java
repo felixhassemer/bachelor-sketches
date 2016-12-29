@@ -14,7 +14,7 @@ import java.io.InputStream;
 import java.io.OutputStream; 
 import java.io.IOException; 
 
-public class sketch_161017b_autoDrawing_v2 extends PApplet {
+public class sketch_161017b_autoDrawing_v3 extends PApplet {
 
 // Easing!!!
 // wichtig
@@ -141,7 +141,7 @@ public void draw() {
 }
   public void settings() {  size(1000, 1000, P2D); }
   static public void main(String[] passedArgs) {
-    String[] appletArgs = new String[] { "sketch_161017b_autoDrawing_v2" };
+    String[] appletArgs = new String[] { "sketch_161017b_autoDrawing_v3" };
     if (passedArgs != null) {
       PApplet.main(concat(appletArgs, passedArgs));
     } else {

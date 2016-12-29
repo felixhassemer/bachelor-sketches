@@ -26,9 +26,12 @@ void draw() {
 void diagline() {
   choose = round(random(1));
   if (choose == 1) {
-      line(x, y, x + uWidth, y + uHeight);
+      // line(x, y, x + uWidth, y + uHeight);
+      ellipse(x+uWidth/2, y+uHeight/2, 30, 30);
     } else {
-      line(x, y + uHeight, x + uWidth, y);
+      ellipse(x+uWidth/2, y+uHeight/2, 15, 15);
+
+      // line(x, y + uHeight, x + uWidth, y);
   }
   x += uWidth;
   if (x + uWidth >= width) {
