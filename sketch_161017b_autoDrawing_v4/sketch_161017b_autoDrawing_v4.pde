@@ -21,6 +21,8 @@ SoundFile file;
 AudioIn in;
 Amplitude amp;
 
+PImage vanessa;
+
 // Farbe
 int hsbMod = 1;
 float satMod = 0;
@@ -33,10 +35,12 @@ void setup() {
   // fullScreen();
   background(0, 0, 0);
   frameRate(100);
+  imageMode(CENTER);
 
   strokeWeight(2);
   colorMode(HSB, 360, 100, 100);
   rectMode(CENTER);
+  vanessa = loadImage("vanessa.png");
 
   // Sound initialisieren
   amp = new Amplitude(this);
@@ -104,6 +108,8 @@ void draw() {
     saveFrame("box_circle-#####.png");
   }
 
+
+
   // Sound einfügen
   float soundTarget = map(amp.analyze(), 0, 0.5, 0, 220);
   float dSound = soundTarget - objSize;
@@ -131,15 +137,18 @@ void shapeGen() {
   }
   stroke(hsbMod, satMod, satMod);
   if (objSize < 200) {
-    ellipse(i, j, objSize, objSize);
+    // ellipse(i, j, objSize, objSize);
   } else {
     rect(i, j, objSize, objSize);
+    image(vanessa, i, j, objSize, objSize);
   }
 
   stroke(hsbMod, satMod, satMod);
   if (objSize < 200) {
-    ellipse(-i, -j, objSize, objSize);
+    // ellipse(-i, -j, objSize, objSize);
   } else {
     rect(-i, -j, objSize, objSize);
+    image(vanessa, -i, -j, objSize, objSize);
+
   }
 }
