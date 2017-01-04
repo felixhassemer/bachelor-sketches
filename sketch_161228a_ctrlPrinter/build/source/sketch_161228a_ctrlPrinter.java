@@ -30,15 +30,15 @@ public void setup() {
   // open("DOSprint.bat");
   // exec(params);
   // launch("F:\\GitHub\\bachelor-sketches\\sketch_161228a_ctrlPrinter\\DOSprint.bat");
-}
-
-public void draw() {
   File workingDir = new File(sketchPath(""));
   try {
     Process p = Runtime.getRuntime().exec(params, null, workingDir);
-  } catch(IOException e) {
-    println(e);
-  }
+    } catch(IOException e) {
+      println(e);
+    }
+}
+
+public void draw() {
   noLoop();
   // lq850print("Hello World!");
   // exit();
