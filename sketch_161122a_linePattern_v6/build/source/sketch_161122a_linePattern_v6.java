@@ -36,9 +36,9 @@ float sineStart = 0;
 float sineIncr = 0.3f;
 
 // UNITS
-float uWmin = 10;
-float uWmax = 200;
-float uHmin = 10;
+float uWmin = 20;
+float uWmax = 160;
+float uHmin = 20;
 float uHmax = 200;
 float uWidth = round(random(uWmin, uWmax));
 float uHeight = round(random(uHmin, uHmax));
@@ -66,7 +66,7 @@ public void settings()
 public void setup()
 {
   background(bgndColor);
-  frameRate(30);
+  frameRate(25);
 }
 
 // ---------------------------------------------------------
@@ -96,10 +96,10 @@ public void draw()
     diagLine2();
   } else if(choose < 70) {
     diagLine();
-  } else if(choose < 75) {
-    dotGrid();
-  } else if(choose < 85) {
-    space();
+  // } else if(choose < 75) {
+  //   dotGrid();
+  // } else if(choose < 85) {
+  //   space();
   } else if(choose < 100) {
     sineWave();
   }
@@ -108,8 +108,6 @@ public void draw()
   x += uWidth;
   xoff += incr;
   uWidth = round(random(uWmin, uWmax));
-  // uWidth = map(noise(xoff+20000), 0, 1, uWmin, uWmax);
-  // println(uWidth);
 
 
   // \u00dcberlauf in n\u00e4chste Zeile
@@ -118,35 +116,12 @@ public void draw()
     // random Unitsize
     y += uHeight;
     uHeight = round(random(uHmin, uHmax));
-    // uHeight = map(noise(xoff+10000), 0, 1, uHmin, uHmax);
 
   }
 
+  // PDF erstellen
+  makePDF();
 
-  // PDF ERSTELLEN
-  if (pdfRender) {
-    if (y + uHeight >= height) {
-      // PDF fertigstellen + neue Seite
-      if (pageCount < pageMax) {
-        // pdf.nextPage();
-        pageCount ++;
-        println(pageCount);
-        y = 0;
-      } else {
-        exit();
-      }
-    }
-  } else {
-    // Seite scrollen
-    // n\u00e4chste Zeile leeren
-    if (y + uHeight >= height) {
-      copy(0, 0, width, y, 0, PApplet.parseInt(-uHeight), width, y);
-      fill(bgndColor);
-      noStroke();
-      rect(0-xTrans, y-uHeight, width, uHmax);
-      y = y-PApplet.parseInt(uHeight);
-    }
-  }
 }
 
 
@@ -175,12 +150,21 @@ public void shapeDraw() {
   noStroke();
 
   // PATTERN
-  choose = round(random(1));
+  choose = round(random(3));
   if (choose == 0) {
     triangle(x, y, x+uWidth, y, x, y+uHeight);
   } else if (choose == 1) {
     triangle(x+uWidth, y, x+uWidth, y+uHeight, x, y+uHeight);
-    // line(x, y + uHeight, x + uWidth, y);
+  } else if (choose == 2) {
+    noFill();
+    stroke(sColor);
+    strokeWeight(sWeight);
+    triangle(x, y, x+uWidth, y, x, y+uHeight);
+  } else if (choose == 3) {
+    noFill();
+    stroke(sColor);
+    strokeWeight(sWeight);
+    triangle(x+uWidth, y, x+uWidth, y+uHeight, x, y+uHeight);
   }
 }
 
@@ -208,23 +192,23 @@ public void sineWave() {
   strokeCap(SQUARE);
   strokeJoin(ROUND);
   noFill();
-  uWidth /= 10;
+
   // PATTERN
   float sineOff = sineStart;
 
-  float j = map(sin(sineOff), -1, 1, 0, uHeight);
-  line(x, y+j*noise(xoff), x+uWidth, y+j*noise(xoff));
-  sineStart += sineIncr;
+  // float j = map(sin(sineOff), -1, 1, 0, uHeight);
+  // line(x, y+j*noise(xoff), x+uWidth, y+j*noise(xoff));
+  // sineStart += sineIncr;
 
-  // beginShape();
+  beginShape();
   // float sineOff = sineStart;
-  // for (int i = 0; i < uWidth; i++) {
-  //   float j = map(sin(sineOff), -1, 1, 0, uHeight);
-  //   vertex(x+i, y+j);
-  //   sineOff += sineIncr;
-  // }
-  // sineStart += incr;
-  // endShape();
+  for (int i = 0; i < uWidth; i++) {
+    float j = map(sin(sineOff), -1, 1, uHeight/4, uHeight-uHeight/4);
+    vertex(x+i, y+j);
+    sineOff += sineIncr;
+  }
+  sineStart += sineIncr;
+  endShape();
 }
 
 public void diagLine2() {
@@ -236,7 +220,7 @@ public void diagLine2() {
   noFill();
 
   // PATTERN
-  choose = round(random(3));
+  choose = round(random(1));
   if (choose == 0) {
     beginShape();
     vertex(x, y);
@@ -275,7 +259,7 @@ public void circle() {
   // println(choose);
   float circleSize = random(10, (uWidth + uHeight)/2);
   if (choose == 0) {
-    ellipse(x+uWidth/2, y+uHeight/2, circleSize/2, circleSize/2);
+    ellipse(x+uWidth/2, y+uHeight/2, circleSize, circleSize);
   } else {
     // Radius auf 90 Grad Winkel beschr\u00e4nken
     // nur halbe Kreise
@@ -315,6 +299,33 @@ public void dotGrid() {
 
 public void linefigures() {
 
+}
+
+public void makePDF() {
+  // PDF ERSTELLEN
+  if (pdfRender) {
+    if (y + uHeight >= height) {
+      // PDF fertigstellen + neue Seite
+      if (pageCount < pageMax) {
+        // pdf.nextPage();
+        pageCount ++;
+        println(pageCount);
+        y = 0;
+      } else {
+        exit();
+      }
+    }
+  } else {
+    // Seite scrollen
+    // n\u00e4chste Zeile leeren
+    if (y + uHeight >= height) {
+      copy(0, 0, width, y, 0, PApplet.parseInt(-uHeight), width, y);
+      fill(bgndColor);
+      noStroke();
+      rect(0-xTrans, y-uHeight, width, uHmax);
+      y = y-PApplet.parseInt(uHeight);
+    }
+  }
 }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "sketch_161122a_linePattern_v6" };
