@@ -21,8 +21,6 @@ SoundFile file;
 AudioIn in;
 Amplitude amp;
 
-PImage vanessa;
-
 // Farbe
 int hsbMod = 1;
 float satMod = 0;
@@ -40,7 +38,6 @@ void setup() {
   strokeWeight(2);
   colorMode(HSB, 360, 100, 100);
   rectMode(CENTER);
-  vanessa = loadImage("vanessa.png");
 
   // Sound initialisieren
   amp = new Amplitude(this);
@@ -69,7 +66,7 @@ void draw() {
 
 
   // Farbwechsel
-  if (countVal % 12 == 1) {
+  if (countVal % 6 == 1) {
     hsbMod += 1;
   }
   // Farbloop
@@ -84,13 +81,8 @@ void draw() {
   }
 
   // EASING
-  float targetX = rX;
-  float dx = targetX - j;
-  j += dx * easing;
-
-  float targetY = rY;
-  float dy = targetY -i;
-  i += dy * easing;
+  j += (rX-j) * easing;
+  i += (rY-i) * easing;
 
   // Hintergrund leeren alle x frames
   if (countVal % 360 == 1) {
@@ -98,11 +90,11 @@ void draw() {
   }
 
   // Intervall für outlines (alle x frames)
-  // if (countVal % 2 == 1) {
-  //   stroke(0);
-  // } else {
-  //   stroke(255);
-  // }
+  if (countVal % 2 == 1) {
+    stroke(0);
+  } else {
+    stroke(255);
+  }
 
   if ((keyPressed == true) && (key == 's')) {
     saveFrame("box_circle-#####.png");
@@ -134,21 +126,19 @@ void shapeGen() {
     objSize = 6;
     noStroke();
     fill(hsbMod, 100, 100);
+    ellipse(i, j, objSize, objSize);
   }
   stroke(hsbMod, satMod, satMod);
-  if (objSize < 200) {
-    // ellipse(i, j, objSize, objSize);
+  if (objSize < 215) {
+    ellipse(i, j, objSize, objSize);
   } else {
     rect(i, j, objSize, objSize);
-    image(vanessa, i, j, objSize, objSize);
   }
 
-  stroke(hsbMod, satMod, satMod);
-  if (objSize < 200) {
-    // ellipse(-i, -j, objSize, objSize);
+  stroke(hsbMod+180, satMod, satMod);
+  if (objSize < 215) {
+    ellipse(-i, -j, objSize, objSize);
   } else {
     rect(-i, -j, objSize, objSize);
-    image(vanessa, -i, -j, objSize, objSize);
-
   }
 }
