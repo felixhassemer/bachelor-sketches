@@ -135,7 +135,7 @@ void shapeGen() {
     rect(i, j, objSize, objSize);
   }
 
-  stroke(hsbMod+180, satMod, satMod);
+  stroke(hsbMod, satMod, satMod);
   if (objSize < 215) {
     ellipse(-i, -j, objSize, objSize);
   } else {
