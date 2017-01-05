@@ -13,7 +13,7 @@ int xTrans = 20;
 float xoff = 0;
 float incr = 0.05;
 
-// sineWave
+// SINE
 float sineStart = 0;
 float sineIncr = 0.3;
 
@@ -24,10 +24,6 @@ float uHmin = 20;
 float uHmax = 200;
 float uW = round(random(uWmin, uWmax));
 float uH = round(random(uHmin, uHmax));
-
-// FONT
-PFont wingdings;
-String[] fontList = PFont.list();
 
 // STYLING
 color sColor = color(0),
@@ -52,11 +48,7 @@ void settings()
 void setup()
 {
   background(bgndColor);
-  frameRate(25);
-  printArray(fontList);
-  // Font initialisieren
-  wingdings = createFont("Verdana", 30);
-  textFont(wingdings);
+  frameRate(20);
 }
 
 // ---------------------------------------------------------
@@ -72,10 +64,6 @@ void draw()
 
   choose = round(map(noise(xoff), 0, 1, 0, 100));
 
-  // wingdings
-  if (keyPressed == true) {
-    wingdings();
-  }
 
   // PATTERNS mischen!
   if (choose < 15) {
@@ -97,6 +85,7 @@ void draw()
   } else if(choose < 100) {
     sineWave();
   }
+
 
   // Neue Unitsize
   x += uW;
@@ -327,8 +316,8 @@ void linefigures() {
 void wingdings() {
   fill(fColor);
   noStroke();
-  textSize(uH);
-  text(key, x, y+uW);
+  textSize(20);
+  text(c, x, y+uW);
 }
 
 void makePDF() {

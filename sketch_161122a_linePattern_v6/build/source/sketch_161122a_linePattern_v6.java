@@ -70,10 +70,11 @@ public void settings()
 public void setup()
 {
   background(bgndColor);
-  frameRate(25);
-  printArray(fontList);
+  frameRate(20);
+  // printArray(fontList); // Fontliste anzeigen
+
   // Font initialisieren
-  wingdings = createFont("Verdana", 30);
+  wingdings = loadFont("Wingdings-Regular-48.vlw");
   textFont(wingdings);
 }
 
@@ -93,28 +94,30 @@ public void draw()
   // wingdings
   if (keyPressed == true) {
     wingdings();
+  } else {
+    // PATTERNS mischen!
+    if (choose < 15) {
+      cross();
+    } else if (choose < 25) {
+      horizontLines();
+    } else if (choose < 40) {
+      shapeDraw();
+    } else if(choose < 45) {
+      circle();
+    } else if(choose < 55) {
+      diagLine2();
+    } else if(choose < 65) {
+      diagLine();
+    } else if(choose < 75) {
+      curves();
+    } else if(choose < 80) {
+      space();
+    } else if(choose < 100) {
+      sineWave();
+    }
   }
 
-  // PATTERNS mischen!
-  if (choose < 15) {
-    cross();
-  } else if (choose < 25) {
-    horizontLines();
-  } else if (choose < 40) {
-    shapeDraw();
-  } else if(choose < 45) {
-    circle();
-  } else if(choose < 55) {
-    diagLine2();
-  } else if(choose < 65) {
-    diagLine();
-  } else if(choose < 75) {
-    curves();
-  } else if(choose < 80) {
-    space();
-  } else if(choose < 100) {
-    sineWave();
-  }
+
 
   // Neue Unitsize
   x += uW;
@@ -345,8 +348,10 @@ public void linefigures() {
 public void wingdings() {
   fill(fColor);
   noStroke();
-  textSize(uH);
-  text(key, x, y+uW);
+  textSize(20);
+  char c = (char) PApplet.parseInt(random(33, 127));
+  // print(c);
+  text(c, x, y+uW);
 }
 
 public void makePDF() {
