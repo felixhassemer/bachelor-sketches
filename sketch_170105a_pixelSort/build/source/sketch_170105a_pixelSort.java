@@ -67,8 +67,8 @@ public void draw () {
       }
     }
     int temp = sorted.pixels[i];
-    sorted.pixels[i] = sorted.pixels[selectedPixel];
-    sorted.pixels[selectedPixel] = temp;
+    // sorted.pixels[i] = sorted.pixels[selectedPixel];
+    // sorted.pixels[selectedPixel] = temp;
 
   }
 }

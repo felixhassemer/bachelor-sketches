@@ -26,6 +26,8 @@ float padding = 200;
 float i = 0;
 float j = 0;
 float objSize;
+float edgeSmooth = 7;
+int sWeight = 2;
 // easing-Faktor
 float easing = 0.15f;
 // Variabeln f\u00fcr neuen zuf\u00e4lligen Wert
@@ -79,7 +81,7 @@ public void draw() {
         bgndColor = color(0, 0, 0);
 
   fill(fillColor);
-  satMod = map(amp.analyze(), 0, 0.5f, 0, 100);
+  satMod = map(amp.analyze(), 0, 1, 0, 100);
 
 
 
@@ -107,12 +109,12 @@ public void draw() {
     background(bgndColor);
   }
 
-  // Intervall f\u00fcr outlines (alle x frames)
-  if (countVal % 2 == 1) {
-    stroke(0);
-  } else {
-    stroke(255);
-  }
+  // // Intervall f\u00fcr outlines (alle x frames)
+  // if (countVal % 2 == 1) {
+  //   stroke(0);
+  // } else {
+  //   stroke(255);
+  // }
 
   if ((keyPressed == true) && (key == 's')) {
     saveFrame("box_circle-#####.png");
@@ -143,21 +145,24 @@ public void shapeGen() {
   if (objSize < 80) {
     objSize = 6;
     noStroke();
-    fill(hsbMod, 100, 100);
+    strokeWeight(0);
+    fill(hsbMod, 40, 100);
     ellipse(i, j, objSize, objSize);
   }
   stroke(hsbMod, satMod, satMod);
+  strokeWeight(sWeight);
   if (objSize < 215) {
     ellipse(i, j, objSize, objSize);
   } else {
-    rect(i, j, objSize, objSize);
+    rect(i, j, objSize, objSize, edgeSmooth);
   }
 
-  stroke(hsbMod+180, satMod, satMod);
+  stroke(hsbMod, satMod, satMod);
+  strokeWeight(sWeight);
   if (objSize < 215) {
     ellipse(-i, -j, objSize, objSize);
   } else {
-    rect(-i, -j, objSize, objSize);
+    rect(-i, -j, objSize, objSize, edgeSmooth);
   }
 }
   public void settings() {  size(1000, 1000, P2D); }

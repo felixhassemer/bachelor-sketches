@@ -51,8 +51,8 @@ void draw () {
       }
     }
     color temp = sorted.pixels[i];
-    sorted.pixels[i] = sorted.pixels[selectedPixel];
-    sorted.pixels[selectedPixel] = temp;
+    // sorted.pixels[i] = sorted.pixels[selectedPixel];
+    // sorted.pixels[selectedPixel] = temp;
 
   }
 }

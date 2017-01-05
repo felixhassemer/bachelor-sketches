@@ -86,7 +86,7 @@ public void draw() {
 
 
   // Farbwechsel
-  if (countVal % 6 == 1) {
+  if (frameCount % 6 == 1) {
     hsbMod += 1;
   }
   // Farbloop
@@ -95,7 +95,7 @@ public void draw() {
   }
 
   // TARGET
-  if (countVal % 40 == 1) {
+  if (frameCount % 40 == 1) {
     rX = random(-width/2+padding, width/2-padding);
     rY = random(-height/2+padding,height/2-padding);
   }
@@ -110,19 +110,8 @@ public void draw() {
   i += dy * easing;
 
   // Hintergrund leeren alle x frames
-  if (countVal % 360 == 1) {
+  if (frameCount % 360 == 1) {
     background(bgndColor);
-  }
-
-  // Intervall f\u00fcr outlines (alle x frames)
-  // if (countVal % 2 == 1) {
-  //   stroke(0);
-  // } else {
-  //   stroke(255);
-  // }
-
-  if ((keyPressed == true) && (key == 's')) {
-    saveFrame("box_circle-#####.png");
   }
 
   // Sound einf\u00fcgen
@@ -132,16 +121,11 @@ public void draw() {
   objSize += dSound * sizeEasing;
 
   myShape.display();
-  // shapeGen();
 
   // Hintergrund mit Mausklick zur\u00fccksetzen
   if (mouseButton == CENTER) {
     background(bgndColor);
   }
-  println(frameCount);
-  // increment
-  countVal ++;
-  println(countVal);
 }
 
 // ----------------------------------------------------------
