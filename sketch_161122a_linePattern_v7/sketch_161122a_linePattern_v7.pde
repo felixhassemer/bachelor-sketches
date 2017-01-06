@@ -8,14 +8,16 @@ boolean pdfRender = false;
 int choose = 0;
 boolean foundOne;
 int x = 0, y = 0;
-int xTrans = 20;
+int padding = 40;
 
 // ARRAY
 FloatDict patterns;
-
+float[] vArray;
+String[] kArray;
 
 // NOISE
 float xoff = 0;
+float yoff = 10000;
 float incr = 0.05;
 
 // SINE
@@ -23,10 +25,10 @@ float sineStart = 0;
 float sineIncr = 0.3;
 
 // UNITS
-float uWmin = 20;
-float uWmax = 160;
-float uHmin = 20;
-float uHmax = 200;
+float uWmin = 10;
+float uWmax = 120;
+float uHmin = 10;
+float uHmax = 140;
 float uW = round(random(uWmin, uWmax));
 float uH = round(random(uHmin, uHmax));
 
@@ -35,6 +37,7 @@ color sColor = color(0),
       fColor = color(0),
       bgndColor = color(255);
 float sWeight = 3;
+float sOffset = sWeight/2;
 
 // ----------------------------------------------------------
 
@@ -43,7 +46,7 @@ void settings()
   if (pdfRender) {
     size(1200, 1200, PDF, "linepattern#####.pdf");
   } else {
-    size(1000, 1000);
+    size(1200, 1000);
     // fullScreen();
   }
 }
@@ -72,25 +75,48 @@ void setup()
 
 void draw()
 {
-  translate(xTrans, 0);
+  translate(padding, 0);
   // PDF renderer
   if (pdfRender) {
     PGraphicsPDF pdf = (PGraphicsPDF) g;
   }
 
-
   choose = round(map(noise(xoff), 0, 1, 0, 100));
-  // choose = round(random(0, 100));
 
   // sorting Dictionary
   patterns.sortValues();
-  float[] vArray = patterns.valueArray();
-  String[] kArray = patterns.keyArray();
-  println(patterns);
+  vArray = patterns.valueArray();
+  kArray = patterns.keyArray();
 
   // choose function for keys in array
+  chooseFunction();
+
+  // random Unitwidth
+  x += uW;
+  uW = round(random(uWmin, uWmax));
+
+  // Paragraph Overflow
+  if (x + uW >= width-padding) {
+    x = 0;
+    // random Unitheight
+    y += uH;
+    uH = round(random(uHmin, uHmax));
+  }
+
+  // NOISE increment
+  xoff += incr;
+  yoff += incr;
+
+  // PDF erstellen
+  makePDF();
+}
+
+// ----------------------------------------------------------
+
+void chooseFunction() {
   for (int index=0; index < patterns.size(); index++) {
     foundOne = false;
+    // search for function
     if (choose < vArray[index]) {
       if (kArray[index] ==        "cross") {
         cross();
@@ -121,76 +147,12 @@ void draw()
         foundOne = true;
       }
     }
-    if (foundOne == true) {
+    // exit condition
+    if (foundOne) {
       break;
     }
   }
-  // for (int i=0; i < patterns.size(); i++) {
-  //   if (kArray[i] == "cross") {
-  //     cross();
-  //   } else if (kArray[i] == "horizontLines") {
-  //     horizontLines();
-  //   } else if (kArray[i] == "shapeDraw") {
-  //     shapeDraw();
-  //   } else if (kArray[i] == "circle") {
-  //     circle();
-  //   } else if (kArray[i] == "diagLine2") {
-  //     diagLine2();
-  //   } else if (kArray[i] == "diagLine") {
-  //     diagLine();
-  //   } else if (kArray[i] == "curves") {
-  //     curves();
-  //   } else if (kArray[i] == "space") {
-  //     space();
-  //   } else if (kArray[i] == "sineWave") {
-  //     sineWave();
-  //   }
-  // }
-  //
-  // // PATTERNS mischen!
-  // if (choose < 15) {
-  //   cross();
-  // } else if (choose < 25) {
-  //   horizontLines();
-  // } else if (choose < 40) {
-  //   shapeDraw();
-  // } else if(choose < 45) {
-  //   circle();
-  // } else if(choose < 55) {
-  //   diagLine2();
-  // } else if(choose < 65) {
-  //   diagLine();
-  // } else if(choose < 70) {
-  //   curves();
-  // } else if(choose < 80) {
-  //   space();
-  // } else if(choose < 100){
-  //   sineWave();
-  // }
-
-
-  // Neue Unitsize
-  x += uW;
-  xoff += incr;
-  uW = round(random(uWmin, uWmax));
-
-
-  // Überlauf in nächste Zeile
-  if (x + uW >= width-xTrans) {
-    x = 0;
-    // random Unitsize
-    y += uH;
-    uH = round(random(uHmin, uHmax));
-
-  }
-
-  // PDF erstellen
-  makePDF();
-
 }
-
-
-// ----------------------------------------------------------
 
 void diagLine() {
   // STYLING
@@ -242,17 +204,27 @@ void curves() {
   noFill();
 
   // PATTERN
-  choose = round(random(1));
+  choose = round(random(3));
   if (choose == 0) {
-      bezier(x, y,
-            x+uW, y,
-            x, y+uH,
-            x+uW, y+uH);
-    } else {
-      bezier(x+uW, y,
-            x, y,
-            x+uW, y+uH,
-            x, y+uH);
+    bezier(x,     y+uH/2,         // point 1 mid-left
+          x+uW/2, y+uH/2,         // handle 1
+          x+uW/2, y+uH-sOffset,   // handle 2
+          x+uW,   y+uH-sOffset);  // point 2 down-right
+  } else if (choose == 1) {
+    bezier(x+uW,  y+uH/2,         // point 1 mid-right
+          x+uW/2, y+uH/2,         // handle 1
+          x+uW/2, y+uH-sOffset,   // handle 2
+          x,      y+uH-sOffset);  // point 2 down-left
+  } else if (choose == 2) {
+    bezier(x+uW,  y+uH/2,         // point 1 mid-right
+          x+uW/2, y+uH/2,         // handle 1
+          x+uW/2, y+sOffset,      // handle 2
+          x,      y+sOffset);     // point 2 up-left
+  } else if (choose == 3) {
+    bezier(x+uW,  y+uH/2,         // point 1 mid-right
+          x+uW/2, y+uH/2,         // handle 1
+          x+uW/2, y+sOffset,      // handle 2
+          x,      y+sOffset);     // point 2 up-left
   }
 }
 
@@ -340,18 +312,31 @@ void cross() {
 }
 
 void circle() {
-  // Perfekten Kreis zeichnen
   // STYLING
-  stroke(sColor);
-  strokeWeight(sWeight);
+  int sChoose = round(random(1));
+  if (sChoose == 0) {
+    noStroke();
+    fill(fColor);
+  } else {
+    noFill();
+    stroke(sColor);
+    strokeWeight(sWeight);
+  }
   strokeCap(SQUARE);
   strokeJoin(ROUND);
-  noFill();
+
+  // VARIABELN
+  float circleSize;
 
   // PATTERN
   choose = round(random(1));
-  // println(choose);
-  float circleSize = random(10, (uW + uH)/2);
+
+  if (uW < uH) {
+    circleSize = random(uW/8, uW/2);
+  } else {
+    circleSize = random(uH/8, uH/2);
+  }
+
   if (choose == 0) {
     ellipse(x+uW/2, y+uH/2, circleSize, circleSize);
   } else {
@@ -362,11 +347,9 @@ void circle() {
     // arcOffset müsste besser organisiert werden
     float arcOffset = radians(map(int(random(4)), 0, 4, 0, 360));
     if (uW < uH) {
-      float rW = random(uW/6, uW/2);
       arc(x+uW/2, y+uH/2, circleSize, circleSize, arcStart+arcOffset, arcEnd+arcOffset, PIE);
     } else {
-      float rH = random(uH/6, uH/2);
-      arc(x+uW/2, y+uH/2, rH, rH, arcStart+arcOffset, arcEnd+arcOffset, PIE);
+      arc(x+uW/2, y+uH/2, circleSize, circleSize, arcStart+arcOffset, arcEnd+arcOffset, PIE);
     }
   }
 }
@@ -392,7 +375,7 @@ void dotGrid() {
 }
 
 void linefigures() {
-
+  
 }
 
 void makePDF() {
@@ -416,7 +399,7 @@ void makePDF() {
       copy(0, 0, width, y, 0, int(-uH), width, y);
       fill(bgndColor);
       noStroke();
-      rect(0-xTrans, y-uH, width, uHmax);
+      rect(0-padding, y-uH, width, uHmax);
       y = y-int(uH);
     }
   }
