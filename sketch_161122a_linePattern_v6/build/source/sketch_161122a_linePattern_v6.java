@@ -31,7 +31,7 @@ int xTrans = 20;
 float xoff = 0;
 float incr = 0.05f;
 
-// sineWave
+// SINE
 float sineStart = 0;
 float sineIncr = 0.3f;
 
@@ -42,10 +42,6 @@ float uHmin = 20;
 float uHmax = 200;
 float uW = round(random(uWmin, uWmax));
 float uH = round(random(uHmin, uHmax));
-
-// FONT
-PFont wingdings;
-String[] fontList = PFont.list();
 
 // STYLING
 int sColor = color(0),
@@ -71,11 +67,6 @@ public void setup()
 {
   background(bgndColor);
   frameRate(20);
-  // printArray(fontList); // Fontliste anzeigen
-
-  // Font initialisieren
-  wingdings = loadFont("Wingdings-Regular-48.vlw");
-  textFont(wingdings);
 }
 
 // ---------------------------------------------------------
@@ -90,33 +81,28 @@ public void draw()
 
 
   choose = round(map(noise(xoff), 0, 1, 0, 100));
+  // choose = round(random(0, 100));
 
-  // wingdings
-  if (keyPressed == true) {
-    wingdings();
-  } else {
-    // PATTERNS mischen!
-    if (choose < 15) {
-      cross();
-    } else if (choose < 25) {
-      horizontLines();
-    } else if (choose < 40) {
-      shapeDraw();
-    } else if(choose < 45) {
-      circle();
-    } else if(choose < 55) {
-      diagLine2();
-    } else if(choose < 65) {
-      diagLine();
-    } else if(choose < 75) {
-      curves();
-    } else if(choose < 80) {
-      space();
-    } else if(choose < 100) {
-      sineWave();
-    }
+  // PATTERNS mischen!
+  if (choose < 15) {
+    cross();
+  } else if (choose < 25) {
+    horizontLines();
+  } else if (choose < 40) {
+    shapeDraw();
+  } else if(choose < 45) {
+    circle();
+  } else if(choose < 55) {
+    diagLine2();
+  } else if(choose < 65) {
+    diagLine();
+  } else if(choose < 75) {
+    curves();
+  } else if(choose < 80) {
+    space();
+  } else if(choose < 100){
+    sineWave();
   }
-
 
 
   // Neue Unitsize
@@ -343,15 +329,6 @@ public void dotGrid() {
 
 public void linefigures() {
 
-}
-
-public void wingdings() {
-  fill(fColor);
-  noStroke();
-  textSize(20);
-  char c = (char) PApplet.parseInt(random(33, 127));
-  // print(c);
-  text(c, x, y+uW);
 }
 
 public void makePDF() {

@@ -63,7 +63,7 @@ void draw()
 
 
   choose = round(map(noise(xoff), 0, 1, 0, 100));
-
+  // choose = round(random(0, 100));
 
   // PATTERNS mischen!
   if (choose < 15) {
@@ -78,11 +78,11 @@ void draw()
     diagLine2();
   } else if(choose < 65) {
     diagLine();
-  } else if(choose < 75) {
+  } else if(choose < 70) {
     curves();
   } else if(choose < 80) {
     space();
-  } else if(choose < 100) {
+  } else if(choose < 100){
     sineWave();
   }
 
@@ -311,13 +311,6 @@ void dotGrid() {
 
 void linefigures() {
 
-}
-
-void wingdings() {
-  fill(fColor);
-  noStroke();
-  textSize(20);
-  text(c, x, y+uW);
 }
 
 void makePDF() {
