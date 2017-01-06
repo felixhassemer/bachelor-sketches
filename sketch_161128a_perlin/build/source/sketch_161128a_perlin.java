@@ -20,6 +20,8 @@ float ystart = 1000;
 float xincr = 0.05f;
 float yincr = 0.001f;
 
+
+
 public void setup() {
   
   background(0);
@@ -27,25 +29,38 @@ public void setup() {
   strokeWeight(10);
   stroke(255);
   noFill();
+  strokeJoin(ROUND);
 }
 
 public void draw() {
+  background(0);
+  float offset = height/2;
+  float scaleVal = 35.0f;
+  float angleInc = PI/28.0f;
   float xoff = xstart;
   float yoff = ystart;
-  // noiseDetail(10);
-  background(0);
-
+  float angle = 0;
   beginShape();
-  for (int x = 0; x<width; x++) {
-    float scale = map(noise(yoff), 0, 1, 0, 10);
-    float y = map(sin(xoff), -1, 1, width/scale, width-width/scale);
+  for (int x = 0; x < width; x++) {
+    float y = offset + (sin(angle) * scaleVal);
     vertex(x, y);
-    xoff += xincr;
-    yoff += yincr;
+    angle += angleInc;
   }
-  xstart += xincr;
-  ystart += yincr;
   endShape();
+  // // noiseDetail(10);
+  // background(0);
+  //
+  // beginShape();
+  // for (int x = 0; x<width; x++) {
+  //   float scale = map(noise(yoff), 0, 1, 0, 10);
+  //   float y = map(sin(xoff), -1, 1, width/scale, width-width/scale);
+  //   vertex(x, y);
+  //   xoff += xincr;
+  //   yoff += yincr;
+  // }
+  // xstart += xincr;
+  // ystart += yincr;
+  // endShape();
 
 
   // fill(0, 5);
