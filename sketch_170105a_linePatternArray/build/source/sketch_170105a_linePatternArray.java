@@ -35,7 +35,7 @@ public void draw() {
   float r2 = random(0, 100);
   patterns.set("horizontLines", r1);
   patterns.set("shapeDraw", r2);
-  patterns.sortKeys();
+  patterns.sortValues();
 
   println(patterns);
   for (int i=0; i < patterns.size(); i++) {

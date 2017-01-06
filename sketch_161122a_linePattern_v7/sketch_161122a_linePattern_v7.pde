@@ -6,8 +6,13 @@ boolean pdfRender = false;
 
 // VARIABELN
 int choose = 0;
+boolean foundOne;
 int x = 0, y = 0;
 int xTrans = 20;
+
+// ARRAY
+FloatDict patterns;
+
 
 // NOISE
 float xoff = 0;
@@ -38,8 +43,8 @@ void settings()
   if (pdfRender) {
     size(1200, 1200, PDF, "linepattern#####.pdf");
   } else {
-    // size(800, 800);
-    fullScreen();
+    size(1000, 1000);
+    // fullScreen();
   }
 }
 
@@ -49,6 +54,18 @@ void setup()
 {
   background(bgndColor);
   frameRate(20);
+
+  // FloatDict init
+  patterns = new FloatDict();
+  patterns.set("cross", 15);
+  patterns.set("horizontLines", 25);
+  patterns.set("shapeDraw", 40);
+  patterns.set("circle", 45);
+  patterns.set("diagLine2", 55);
+  patterns.set("diagLine", 65);
+  patterns.set("curves", 70);
+  patterns.set("space", 80);
+  patterns.set("sineWave", 100);
 }
 
 // ---------------------------------------------------------
@@ -65,26 +82,91 @@ void draw()
   choose = round(map(noise(xoff), 0, 1, 0, 100));
   // choose = round(random(0, 100));
 
-  // PATTERNS mischen!
-  if (choose < 15) {
-    cross();
-  } else if (choose < 25) {
-    horizontLines();
-  } else if (choose < 40) {
-    shapeDraw();
-  } else if(choose < 45) {
-    circle();
-  } else if(choose < 55) {
-    diagLine2();
-  } else if(choose < 65) {
-    diagLine();
-  } else if(choose < 70) {
-    curves();
-  } else if(choose < 80) {
-    space();
-  } else if(choose < 100){
-    sineWave();
+  // sorting Dictionary
+  patterns.sortValues();
+  float[] vArray = patterns.valueArray();
+  String[] kArray = patterns.keyArray();
+  println(patterns);
+
+  // choose function for keys in array
+  for (int index=0; index < patterns.size(); index++) {
+    foundOne = false;
+    if (choose < vArray[index]) {
+      if (kArray[index] ==        "cross") {
+        cross();
+        foundOne = true;
+      } else if (kArray[index] == "horizontLines") {
+        horizontLines();
+        foundOne = true;
+      } else if (kArray[index] == "shapeDraw") {
+        shapeDraw();
+        foundOne = true;
+      } else if (kArray[index] == "circle") {
+        circle();
+        foundOne = true;
+      } else if (kArray[index] == "diagLine2") {
+        diagLine2();
+        foundOne = true;
+      } else if (kArray[index] == "diagLine") {
+        diagLine();
+        foundOne = true;
+      } else if (kArray[index] == "curves") {
+        curves();
+        foundOne = true;
+      } else if (kArray[index] == "space") {
+        space();
+        foundOne = true;
+      } else if (kArray[index] == "sineWave") {
+        sineWave();
+        foundOne = true;
+      }
+    }
+    if (foundOne == true) {
+      break;
+    }
   }
+  // for (int i=0; i < patterns.size(); i++) {
+  //   if (kArray[i] == "cross") {
+  //     cross();
+  //   } else if (kArray[i] == "horizontLines") {
+  //     horizontLines();
+  //   } else if (kArray[i] == "shapeDraw") {
+  //     shapeDraw();
+  //   } else if (kArray[i] == "circle") {
+  //     circle();
+  //   } else if (kArray[i] == "diagLine2") {
+  //     diagLine2();
+  //   } else if (kArray[i] == "diagLine") {
+  //     diagLine();
+  //   } else if (kArray[i] == "curves") {
+  //     curves();
+  //   } else if (kArray[i] == "space") {
+  //     space();
+  //   } else if (kArray[i] == "sineWave") {
+  //     sineWave();
+  //   }
+  // }
+  //
+  // // PATTERNS mischen!
+  // if (choose < 15) {
+  //   cross();
+  // } else if (choose < 25) {
+  //   horizontLines();
+  // } else if (choose < 40) {
+  //   shapeDraw();
+  // } else if(choose < 45) {
+  //   circle();
+  // } else if(choose < 55) {
+  //   diagLine2();
+  // } else if(choose < 65) {
+  //   diagLine();
+  // } else if(choose < 70) {
+  //   curves();
+  // } else if(choose < 80) {
+  //   space();
+  // } else if(choose < 100){
+  //   sineWave();
+  // }
 
 
   // Neue Unitsize
