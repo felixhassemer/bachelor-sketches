@@ -30,7 +30,6 @@ boolean foundOne;
 int x = 0, y = 0;
 int padding = 150;
 
-
 // ARRAY
 FloatDict patterns;
 float[] vArray;
@@ -67,17 +66,19 @@ int sCap = ROUND;
 int sJoin = ROUND;
 
 // ----------------------------------------------------------
+// SETTINGS
 
 public void settings() {
   if (pdfRender) {
     size(1900, 1080, PDF, "linepattern_v7.pdf");
   } else {
-    size(1200, 800);
-    // fullScreen();
+    // size(1200, 800);
+    fullScreen();
   }
 }
 
 // ----------------------------------------------------------
+// SETUP
 
 public void setup() {
   background(bgndColor);
@@ -95,18 +96,14 @@ public void setup() {
   for (int i=0; i<rArray.length; i++) {
     rArray[i] = random(100000);
   }
-  println(rArray);
 }
 
 // ---------------------------------------------------------
+// DRAW
 
 public void draw() {
-  // clear left side
-  fill(255);
-  noStroke();
-  rect(0, 0, padding, y);
-  rect(width-padding, 0, padding, y);
-  translate(padding, 0);
+  // clear sides with background color
+  clearSides();
 
   // PDF renderer
   if (pdfRender) {
@@ -160,6 +157,7 @@ public void draw() {
 }
 
 // ----------------------------------------------------------
+// CORE FUNCTIONS
 
 public void chooseFunction() {
   for (int index=0; index < patterns.size(); index++) {
@@ -196,11 +194,14 @@ public void chooseFunction() {
       } else if (kArray[index] == "lineFigures") {
         lineFigures();
         foundOne = true;
+      } else if (kArray[index] == "dotGrid") {
+        dotGrid();
+        foundOne = true;
       }
-    }
-    // exit condition
-    if (foundOne) {
-      break;
+      // exit condition
+      if (foundOne) {
+        break;
+      }
     }
   }
 }
@@ -217,8 +218,46 @@ public void setPatternNoise() {
   patterns.set("space",         map(noise(yoff+rArray[8]), 0, 1, 0, 100));
   patterns.set("lineFigures",   map(noise(yoff+rArray[9]), 0, 1, 0, 100));
   patterns.set("sineWave",      map(noise(yoff+rArray[10]), 0, 1, 0, 100));
+  patterns.set("dotGrid",       map(noise(yoff+rArray[11]), 0, 1, 0, 100));
 }
+
+public void makePDF() {
+  // PDF ERSTELLEN
+  if (pdfRender) {
+    if (y + uH >= height) {
+      // PDF fertigstellen + neue Seite
+      if (pageCount < pageMax) {
+        pdf.nextPage();
+        pageCount ++;
+        println(pageCount);
+        y = 0;
+      } else {
+        exit();
+      }
+    }
+  }
+}
+
+public void scrollScreen() {
+  if (y + uH >= height) {
+    copy(0, 0, width, y, 0, PApplet.parseInt(-uH), width, y);
+    fill(bgndColor);
+    noStroke();
+    rect(0-padding, y-uH, width, uHmax);
+    y = y-PApplet.parseInt(uH);
+  }
+}
+
+public void clearSides() {
+  fill(bgndColor);
+  noStroke();
+  rect(0, 0, padding, y);
+  rect(width-padding, 0, padding, y);
+  translate(padding, 0);
+}
+
 // ----------------------------------------------------------
+// PATTERN FUNCTIONS
 
 public void diagLine() {
   // STYLING
@@ -376,7 +415,7 @@ public void sineWave() {
     sineInc =   map(noise(sineOff), 0, 1, PI/180, PI/6);
     float tempY = uH/2 + (sin(sineAngle) * scaleVal);
     vertex(x+i, y+tempY);
-    // increment Noise for sine
+    // increment noise for sine
     sineAngle += sineInc;
     sineOff += sineOffInc;
   }
@@ -411,6 +450,8 @@ public void diagLine2() {
 }
 
 public void cross() {
+  choose = round(random(1));
+
   // STYLING
   stroke(sColor);
   strokeWeight(sWeight);
@@ -419,11 +460,20 @@ public void cross() {
   noFill();
 
   // PATTERN
-  line(x+uW/5, y+uH/5, x+(uW-uW/5), y+(uH-uH/5));
-  line(x+uW/5, y+(uH-uH/5), x+(uW-uW/5), y+uH/5);
+  if (choose == 0) {
+    line(x+uW/5, y+uH/5, x+(uW-uW/5), y+(uH-uH/5));
+    line(x+uW/5, y+(uH-uH/5), x+(uW-uW/5), y+uH/5);
+  } else {
+    line(x+uW/2, y, x+uW/2, y+uH);
+    line(x, y+uH/2, x+uW, y+uH/2);
+  }
 }
 
 public void circle() {
+  choose = round(random(1));
+  // LOCAL VARIABLES
+  float circleSize = 0;
+
   // STYLING
   int sChoose = round(random(1));
   if (sChoose == 0) {
@@ -437,30 +487,25 @@ public void circle() {
   strokeCap(sCap);
   strokeJoin(sJoin);
 
-  // VARIABELN
-  float circleSize;
-
   // PATTERN
-  choose = round(random(1));
-
-  if (uW < uH) {
-    circleSize = random(uW/8, uW/2);
-  } else {
-    circleSize = random(uH/8, uH/2);
-  }
-
   if (choose == 0) {
-    ellipse(x+uW/2, y+uH/2, circleSize, circleSize);
-  } else {
-    // Radius auf 180 Grad Winkel beschr\u00e4nken
-    // nur halbe Kreise
-    float arcStart =  radians(map(PApplet.parseInt(random(2)), 0, 2, 0, 360));
-    float arcEnd =    radians(map(PApplet.parseInt(random(2)), 0, 2, 0, 360));
-    // arcOffset m\u00fcsste besser organisiert werden
-    float arcOffset = radians(map(PApplet.parseInt(random(4)), 0, 4, 0, 360));
     if (uW < uH) {
+      circleSize = random(uW/8, uW);
+    } else {
+      circleSize = random(uH/8, uH);
+      ellipse(x+uW/2, y+uH/2, circleSize, circleSize);
+    }
+  } else {
+    // set arc to 180 degrees
+    float arcStart =  radians(0);
+    float arcEnd =    radians(180);
+    // Offset rotation
+    float arcOffset = radians(map(PApplet.parseInt(random(8)), 0, 8, 0, 360));
+    if (uW < uH) {
+      circleSize = random(uW/8, uW);
       arc(x+uW/2, y+uH/2, circleSize, circleSize, arcStart+arcOffset, arcEnd+arcOffset, PIE);
     } else {
+      circleSize = random(uH/8, uH);
       arc(x+uW/2, y+uH/2, circleSize, circleSize, arcStart+arcOffset, arcEnd+arcOffset, PIE);
     }
   }
@@ -523,33 +568,6 @@ public void lineFigures() {
     vertex(x + xTemp , y + yTemp);
   }
   endShape();
-}
-
-public void makePDF() {
-  // PDF ERSTELLEN
-  if (pdfRender) {
-    if (y + uH >= height) {
-      // PDF fertigstellen + neue Seite
-      if (pageCount < pageMax) {
-        pdf.nextPage();
-        pageCount ++;
-        println(pageCount);
-        y = 0;
-      } else {
-        exit();
-      }
-    }
-  }
-}
-
-public void scrollScreen() {
-  if (y + uH >= height) {
-    copy(0, 0, width, y, 0, PApplet.parseInt(-uH), width, y);
-    fill(bgndColor);
-    noStroke();
-    rect(0-padding, y-uH, width, uHmax);
-    y = y-PApplet.parseInt(uH);
-  }
 }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "sketch_161122a_linePattern_v7" };

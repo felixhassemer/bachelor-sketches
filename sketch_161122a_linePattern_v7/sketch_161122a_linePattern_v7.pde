@@ -12,7 +12,6 @@ boolean foundOne;
 int x = 0, y = 0;
 int padding = 150;
 
-
 // ARRAY
 FloatDict patterns;
 float[] vArray;
@@ -49,17 +48,19 @@ int sCap = ROUND;
 int sJoin = ROUND;
 
 // ----------------------------------------------------------
+// SETTINGS
 
 void settings() {
   if (pdfRender) {
     size(1900, 1080, PDF, "linepattern_v7.pdf");
   } else {
-    size(1200, 800);
-    // fullScreen();
+    // size(1200, 800);
+    fullScreen();
   }
 }
 
 // ----------------------------------------------------------
+// SETUP
 
 void setup() {
   background(bgndColor);
@@ -77,18 +78,14 @@ void setup() {
   for (int i=0; i<rArray.length; i++) {
     rArray[i] = random(100000);
   }
-  println(rArray);
 }
 
 // ---------------------------------------------------------
+// DRAW
 
 void draw() {
-  // clear left side
-  fill(255);
-  noStroke();
-  rect(0, 0, padding, y);
-  rect(width-padding, 0, padding, y);
-  translate(padding, 0);
+  // clear sides with background color
+  clearSides();
 
   // PDF renderer
   if (pdfRender) {
@@ -179,11 +176,14 @@ void chooseFunction() {
       } else if (kArray[index] == "lineFigures") {
         lineFigures();
         foundOne = true;
+      } else if (kArray[index] == "dotGrid") {
+        dotGrid();
+        foundOne = true;
       }
-    }
-    // exit condition
-    if (foundOne) {
-      break;
+      // exit condition
+      if (foundOne) {
+        break;
+      }
     }
   }
 }
@@ -200,8 +200,46 @@ void setPatternNoise() {
   patterns.set("space",         map(noise(yoff+rArray[8]), 0, 1, 0, 100));
   patterns.set("lineFigures",   map(noise(yoff+rArray[9]), 0, 1, 0, 100));
   patterns.set("sineWave",      map(noise(yoff+rArray[10]), 0, 1, 0, 100));
+  patterns.set("dotGrid",       map(noise(yoff+rArray[11]), 0, 1, 0, 100));
 }
+
+void makePDF() {
+  // PDF ERSTELLEN
+  if (pdfRender) {
+    if (y + uH >= height) {
+      // PDF fertigstellen + neue Seite
+      if (pageCount < pageMax) {
+        pdf.nextPage();
+        pageCount ++;
+        println(pageCount);
+        y = 0;
+      } else {
+        exit();
+      }
+    }
+  }
+}
+
+void scrollScreen() {
+  if (y + uH >= height) {
+    copy(0, 0, width, y, 0, int(-uH), width, y);
+    fill(bgndColor);
+    noStroke();
+    rect(0-padding, y-uH, width, uHmax);
+    y = y-int(uH);
+  }
+}
+
+void clearSides() {
+  fill(bgndColor);
+  noStroke();
+  rect(0, 0, padding, y);
+  rect(width-padding, 0, padding, y);
+  translate(padding, 0);
+}
+
 // ----------------------------------------------------------
+// PATTERN FUNCTIONS
 
 void diagLine() {
   // STYLING
@@ -394,6 +432,8 @@ void diagLine2() {
 }
 
 void cross() {
+  choose = round(random(1));
+
   // STYLING
   stroke(sColor);
   strokeWeight(sWeight);
@@ -402,11 +442,20 @@ void cross() {
   noFill();
 
   // PATTERN
-  line(x+uW/5, y+uH/5, x+(uW-uW/5), y+(uH-uH/5));
-  line(x+uW/5, y+(uH-uH/5), x+(uW-uW/5), y+uH/5);
+  if (choose == 0) {
+    line(x+uW/5, y+uH/5, x+(uW-uW/5), y+(uH-uH/5));
+    line(x+uW/5, y+(uH-uH/5), x+(uW-uW/5), y+uH/5);
+  } else {
+    line(x+uW/2, y, x+uW/2, y+uH);
+    line(x, y+uH/2, x+uW, y+uH/2);
+  }
 }
 
 void circle() {
+  choose = round(random(1));
+  // LOCAL VARIABLES
+  float circleSize = 0;
+
   // STYLING
   int sChoose = round(random(1));
   if (sChoose == 0) {
@@ -420,30 +469,25 @@ void circle() {
   strokeCap(sCap);
   strokeJoin(sJoin);
 
-  // VARIABELN
-  float circleSize;
-
   // PATTERN
-  choose = round(random(1));
-
-  if (uW < uH) {
-    circleSize = random(uW/8, uW/2);
-  } else {
-    circleSize = random(uH/8, uH/2);
-  }
-
   if (choose == 0) {
-    ellipse(x+uW/2, y+uH/2, circleSize, circleSize);
-  } else {
-    // Radius auf 180 Grad Winkel beschränken
-    // nur halbe Kreise
-    float arcStart =  radians(map(int(random(2)), 0, 2, 0, 360));
-    float arcEnd =    radians(map(int(random(2)), 0, 2, 0, 360));
-    // arcOffset müsste besser organisiert werden
-    float arcOffset = radians(map(int(random(4)), 0, 4, 0, 360));
     if (uW < uH) {
+      circleSize = random(uW/8, uW);
+    } else {
+      circleSize = random(uH/8, uH);
+      ellipse(x+uW/2, y+uH/2, circleSize, circleSize);
+    }
+  } else {
+    // set arc to 180 degrees
+    float arcStart =  radians(0);
+    float arcEnd =    radians(180);
+    // Offset rotation
+    float arcOffset = radians(map(int(random(8)), 0, 8, 0, 360));
+    if (uW < uH) {
+      circleSize = random(uW/8, uW);
       arc(x+uW/2, y+uH/2, circleSize, circleSize, arcStart+arcOffset, arcEnd+arcOffset, PIE);
     } else {
+      circleSize = random(uH/8, uH);
       arc(x+uW/2, y+uH/2, circleSize, circleSize, arcStart+arcOffset, arcEnd+arcOffset, PIE);
     }
   }
@@ -506,31 +550,4 @@ void lineFigures() {
     vertex(x + xTemp , y + yTemp);
   }
   endShape();
-}
-
-void makePDF() {
-  // PDF ERSTELLEN
-  if (pdfRender) {
-    if (y + uH >= height) {
-      // PDF fertigstellen + neue Seite
-      if (pageCount < pageMax) {
-        pdf.nextPage();
-        pageCount ++;
-        println(pageCount);
-        y = 0;
-      } else {
-        exit();
-      }
-    }
-  }
-}
-
-void scrollScreen() {
-  if (y + uH >= height) {
-    copy(0, 0, width, y, 0, int(-uH), width, y);
-    fill(bgndColor);
-    noStroke();
-    rect(0-padding, y-uH, width, uHmax);
-    y = y-int(uH);
-  }
 }
