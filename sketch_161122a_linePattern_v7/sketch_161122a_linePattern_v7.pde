@@ -7,9 +7,11 @@ PGraphicsPDF pdf;
 
 // VARIABELN
 int choose = 0;
+float[] rArray;
 boolean foundOne;
 int x = 0, y = 0;
 int padding = 150;
+
 
 // ARRAY
 FloatDict patterns;
@@ -21,6 +23,8 @@ float xoff = 0;
 float yoff = 10000;
 float incr = 0.05;
 float yincr = 0.001;
+float sineOff = 0;
+float sineOffInc = 0.005;
 
 // SINE
 float sineAngle = 0;
@@ -40,83 +44,71 @@ color sColor = color(0),
       fColor = color(0),
       bgndColor = color(255);
 float sWeight = 3;
-float sOff = sWeight/2;
+float sOff = sWeight/2; // used for offsetting strokes
 int sCap = ROUND;
 int sJoin = ROUND;
 
 // ----------------------------------------------------------
 
-void settings()
-{
+void settings() {
   if (pdfRender) {
     size(1900, 1080, PDF, "linepattern_v7.pdf");
   } else {
-    // size(800, 800);
-    fullScreen();
+    size(1200, 800);
+    // fullScreen();
   }
 }
 
 // ----------------------------------------------------------
 
-void setup()
-{
+void setup() {
   background(bgndColor);
 
   // Framerate for PDF or normal use
   if (pdfRender) {
     frameRate(3000);
   } else {
-    frameRate(300);
+    frameRate(25);
   }
 
   // FloatDict init
   patterns = new FloatDict();
-  patterns.set("cross", 15);
-  patterns.set("horizontLines", 25);
-  patterns.set("triangleDraw", 40);
-  patterns.set("circle", 45);
-  patterns.set("diagLine2", 55);
-  patterns.set("diagLine", 65);
-  patterns.set("curves", 70);
-  patterns.set("space", 80);
-  patterns.set("lineFigures", 90);
-  patterns.set("sineWave", 100);
+  rArray = new float[100];
+  for (int i=0; i<rArray.length; i++) {
+    rArray[i] = random(100000);
+  }
+  println(rArray);
 }
 
 // ---------------------------------------------------------
 
-void draw()
-{
+void draw() {
+  // clear left side
+  fill(255);
+  noStroke();
+  rect(0, 0, padding, y);
+  rect(width-padding, 0, padding, y);
   translate(padding, 0);
+
   // PDF renderer
   if (pdfRender) {
     pdf = (PGraphicsPDF) g;
   }
 
   // RNG for patterns
-  patterns.set("triangleDraw", map(noise(yoff), 0, 1, 0, 100));
-  patterns.set("cross", map(noise(yoff+58637), 0, 1, 0, 100));
-  patterns.set("horizontLines", map(noise(yoff+12354), 0, 1, 0, 100));
-  patterns.set("triangleDraw", map(noise(yoff+1826), 0, 1, 0, 100));
-  patterns.set("circle", map(noise(yoff-3000), 0, 1, 0, 100));
-  patterns.set("diagLine2", map(noise(yoff+5000), 0, 1, 0, 100));
-  patterns.set("diagLine", map(noise(yoff+80000), 0, 1, 0, 100));
-  patterns.set("curves", map(noise(yoff+16358), 0, 1, 0, 100));
-  patterns.set("space", map(noise(yoff+87381), 0, 1, 0, 100));
-  patterns.set("lineFigures", map(noise(yoff+43891), 0, 1, 0, 100));
-  patterns.set("sineWave", map(noise(yoff+9471), 0, 1, 0, 100));
+  setPatternNoise();
+
+  // set UnitWidth to random or until margin
+  if (dist(x, y, width-padding*2, y) > uWmax) {
+    uW = round(random(uWmin, uWmax));
+  } else {
+    uW = dist(x, y, width-padding*2, y);
+  }
 
   // sorting Dictionary
   patterns.sortValues();
   vArray = patterns.valueArray();
   kArray = patterns.keyArray();
-
-  // set UnitWidth to random or until margin
-  if (dist(x, y, width-padding*2, y) > 140) {
-    uW = round(random(uWmin, uWmax));
-  } else {
-    uW = dist(x, y, width-padding*2, y);
-  }
 
   // set maximum Range
   float chooseMax = max(vArray);
@@ -140,11 +132,17 @@ void draw()
   xoff += incr;
   yoff += yincr;
 
-  // PDF erstellen
-  makePDF();
+  // PDF create
+  // or scroll screencontent
+  if (pdfRender) {
+    makePDF();
+  } else {
+    scrollScreen();
+  }
 }
 
 // ----------------------------------------------------------
+// CORE FUNCTIONS
 
 void chooseFunction() {
   for (int index=0; index < patterns.size(); index++) {
@@ -190,6 +188,21 @@ void chooseFunction() {
   }
 }
 
+void setPatternNoise() {
+  patterns.set("triangleDraw",  map(noise(yoff+rArray[0]), 0, 1, 0, 100));
+  patterns.set("cross",         map(noise(yoff+rArray[1]), 0, 1, 0, 100));
+  patterns.set("horizontLines", map(noise(yoff+rArray[2]), 0, 1, 0, 100));
+  patterns.set("triangleDraw",  map(noise(yoff+rArray[3]), 0, 1, 0, 100));
+  patterns.set("circle",        map(noise(yoff+rArray[4]), 0, 1, 0, 100));
+  patterns.set("diagLine2",     map(noise(yoff+rArray[5]), 0, 1, 0, 100));
+  patterns.set("diagLine",      map(noise(yoff+rArray[6]), 0, 1, 0, 100));
+  patterns.set("curves",        map(noise(yoff+rArray[7]), 0, 1, 0, 100));
+  patterns.set("space",         map(noise(yoff+rArray[8]), 0, 1, 0, 100));
+  patterns.set("lineFigures",   map(noise(yoff+rArray[9]), 0, 1, 0, 100));
+  patterns.set("sineWave",      map(noise(yoff+rArray[10]), 0, 1, 0, 100));
+}
+// ----------------------------------------------------------
+
 void diagLine() {
   // STYLING
   stroke(sColor);
@@ -208,39 +221,47 @@ void diagLine() {
 }
 
 void triangleDraw() {
+  choose = round(random(1));
+
   // STYLING
-  fill(fColor);
-  noStroke();
+  if (choose < 2) {
+    fill(fColor);
+    noStroke();
+  } else {
+    noFill();
+    stroke(sColor);
+    strokeWeight(sWeight);
+  }
 
   // PATTERN
-  choose = round(random(1));
   if (choose == 0) {
     triangle(x, y, x+uW, y, x, y+uH);
   } else if (choose == 1) {
     triangle(x+uW, y, x+uW, y+uH, x, y+uH);
   // } else if (choose == 2) {
-  //   noFill();
-  //   stroke(sColor);
-  //   strokeWeight(sWeight);
+  //   unfilled shapes
   //   triangle(x, y, x+uW, y, x, y+uH);
   // } else if (choose == 3) {
-  //   noFill();
-  //   stroke(sColor);
-  //   strokeWeight(sWeight);
   //   triangle(x+uW, y, x+uW, y+uH, x, y+uH);
   }
 }
 
 void curves() {
+  choose = round(random(7));
+
   // STYLING
-  stroke(sColor);
-  strokeWeight(sWeight);
-  strokeCap(sCap);
-  strokeJoin(sJoin);
-  noFill();
+  if (choose < 4) {
+    noFill();
+    stroke(sColor);
+    strokeWeight(sWeight);
+    strokeCap(sCap);
+    strokeJoin(sJoin);
+  } else {
+    fill(fColor);
+    noStroke();
+  }
 
   // PATTERN
-  choose = round(random(3));
   if (choose == 0) {
     bezier(x,     y+uH/2,       // point 1 mid-left
           x+uW/2, y+uH/2,       // handle 1
@@ -261,6 +282,47 @@ void curves() {
           x+uW/2, y+uH/2,       // handle 1
           x+uW/2, y+sOff,       // handle 2
           x,      y+sOff);      // point 2 up-left
+  } else if (choose == 4) {
+    // Filled shapes
+    beginShape();
+    vertex        (x,       y+uH/2);  // vertex 1 mid-left
+    bezierVertex  (x+uW/2,  y+uH/2,   // handle 1
+                  x+uW/2,   y+uH,     // handle 2
+                  x+uW,     y+uH);    // vertex 2 down-right
+    bezierVertex  (x+uW,    y+uH,     // handle 1 (sharp)
+                  x,        y+uH,     // handle 2 (sharp)
+                  x,        y+uH);    // vertex 3 down-left
+    endShape();
+  } else if (choose == 5) {
+    beginShape();
+    vertex        (x+uW,    y+uH/2);  // vertex 1 mid-right
+    bezierVertex  (x+uW/2,  y+uH/2,   // handle 1
+                  x+uW/2,   y+uH,     // handle 2
+                  x,        y+uH);    // vertex 2 down-left
+    bezierVertex  (x,       y+uH,     // handle 1 (sharp)
+                  x+uW,     y+uH,     // handle 2 (sharp)
+                  x+uW,     y+uH);    // vertex 3 down-left
+    endShape();
+  } else if (choose == 6) {
+    beginShape();
+    vertex        (x+uW,    y+uH/2);  // vertex 1 mid-right
+    bezierVertex  (x+uW/2,  y+uH/2,   // handle 1
+                  x+uW/2,   y,        // handle 2
+                  x,        y);       // vertex 2 up-left
+    bezierVertex  (x,       y,        // handle 1 (sharp)
+                  x+uW,     y,        // handle 2 (sharp)
+                  x+uW,     y);       // vertex 3 up-right
+    endShape();
+  } else if (choose == 7) {
+    beginShape();
+    vertex        (x,       y+uH/2);  // vertex 1 mid-left
+    bezierVertex  (x+uW/2,  y+uH/2,   // handle 1
+                  x+uW/2,   y,        // handle 2
+                  x+uW,     y);       // vertex 2 up-right
+    bezierVertex  (x+uW,    y,        // handle 1 (sharp)
+                  x,        y,        // handle 2 (sharp)
+                  x,        y);       // vertex 3 up-left
+    endShape();
   }
 }
 
@@ -290,25 +352,18 @@ void sineWave() {
   strokeJoin(sJoin);
   noFill();
 
-  scaleVal = map(noise(xoff+60000), 0, 1, 0, uH/2);
-  sineInc = map(noise(xoff), 0, 1, PI/100, PI/4);
-
   // PATTERN
   beginShape();
-  for (int i=0; i<=uW; i++) {
+  for (int i=0; i<uW; i++) {
+    scaleVal =  map(noise(sineOff+60000), 0, 1, 0, uH/2);
+    sineInc =   map(noise(sineOff), 0, 1, PI/180, PI/6);
     float tempY = uH/2 + (sin(sineAngle) * scaleVal);
     vertex(x+i, y+tempY);
+    // increment noise for sine
     sineAngle += sineInc;
+    sineOff += sineOffInc;
   }
   endShape();
-  // beginShape();
-  // for (int i = 0; i < uW; i++) {
-  //   float j = map(sin(sineOff), -1, 1, uH/4, uH-uH/4);
-  //   vertex(x+i, y+j);
-  //   sineOff += sineInc;
-  // }
-  // sineAngle += sineInc;
-  // endShape();
 }
 
 void diagLine2() {
@@ -467,15 +522,15 @@ void makePDF() {
         exit();
       }
     }
-  } else {
-    // Seite scrollen
-    // nächste Zeile leeren
-    if (y + uH >= height) {
-      copy(0, 0, width, y, 0, int(-uH), width, y);
-      fill(bgndColor);
-      noStroke();
-      rect(0-padding, y-uH, width, uHmax);
-      y = y-int(uH);
-    }
+  }
+}
+
+void scrollScreen() {
+  if (y + uH >= height) {
+    copy(0, 0, width, y, 0, int(-uH), width, y);
+    fill(bgndColor);
+    noStroke();
+    rect(0-padding, y-uH, width, uHmax);
+    y = y-int(uH);
   }
 }
