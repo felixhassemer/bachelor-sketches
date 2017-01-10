@@ -73,12 +73,12 @@ void drawShapes() {
   // ----------------------------------------------------------
 
   // Kreis zeichnen
-  // int circleSize = round(random(uWidth/6, uWidth - uWidth/3));
-  // fill(255);
-  // ellipse(x + random(circleSize/2, uWidth - circleSize/2),
-  //         y + random(circleSize/2, uHeight - circleSize/2),
-  //         circleSize, circleSize);
-  // noFill();
+  int circleSize = round(random(uWidth/6, uWidth - uWidth/3));
+  fill(255);
+  ellipse(x + random(circleSize/2, uWidth - circleSize/2),
+          y + random(circleSize/2, uHeight - circleSize/2),
+          circleSize, circleSize);
+  noFill();
 
   // ----------------------------------------------------------
 

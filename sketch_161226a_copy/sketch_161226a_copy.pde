@@ -1,5 +1,6 @@
 PImage img;
 int x = 500;
+int count = 0;
 
 void setup() {
   size(1000, 1000);
@@ -10,6 +11,9 @@ void setup() {
 }
 
 void draw() {
-  copy(int(random(width)),int(random(height)), 100, 100, int(random(width)), int(random(height)), 100, 100);
   // copy(x, 0, width/2, height, x+1, 0, width/2, height);
+  if (count < 120) {
+    copy(int(random(width)),int(random(height)), 20, 40, int(random(width)), int(random(height)), 20, 40);
+    count ++;
+  }
 }

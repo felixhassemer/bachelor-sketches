@@ -16,6 +16,7 @@ public class sketch_161226a_copy extends PApplet {
 
 PImage img;
 int x = 500;
+int count = 0;
 
 public void setup() {
   
@@ -26,8 +27,11 @@ public void setup() {
 }
 
 public void draw() {
-  copy(PApplet.parseInt(random(width)),PApplet.parseInt(random(height)), 100, 100, PApplet.parseInt(random(width)), PApplet.parseInt(random(height)), 100, 100);
   // copy(x, 0, width/2, height, x+1, 0, width/2, height);
+  if (count < 120) {
+    copy(PApplet.parseInt(random(width)),PApplet.parseInt(random(height)), 20, 40, PApplet.parseInt(random(width)), PApplet.parseInt(random(height)), 20, 40);
+    count ++;
+  }
 }
   public void settings() {  size(1000, 1000); }
   static public void main(String[] passedArgs) {

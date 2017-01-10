@@ -69,7 +69,7 @@ void setup() {
   if (pdfRender) {
     frameRate(3000);
   } else {
-    frameRate(25);
+    frameRate(200);
   }
 
   // FloatDict init
@@ -190,7 +190,7 @@ void chooseFunction() {
 
 void setPatternNoise() {
   patterns.set("triangleDraw",  map(noise(yoff+rArray[0]), 0, 1, 0, 100));
-  patterns.set("cross",         map(noise(yoff+rArray[1]), 0, 1, 0, 100));
+  // patterns.set("cross",         map(noise(yoff+rArray[1]), 0, 1, 0, 100));
   patterns.set("horizontLines", map(noise(yoff+rArray[2]), 0, 1, 0, 100));
   patterns.set("triangleDraw",  map(noise(yoff+rArray[3]), 0, 1, 0, 100));
   patterns.set("circle",        map(noise(yoff+rArray[4]), 0, 1, 0, 100));
@@ -200,7 +200,7 @@ void setPatternNoise() {
   patterns.set("space",         map(noise(yoff+rArray[8]), 0, 1, 0, 100));
   patterns.set("lineFigures",   map(noise(yoff+rArray[9]), 0, 1, 0, 100));
   patterns.set("sineWave",      map(noise(yoff+rArray[10]), 0, 1, 0, 100));
-  patterns.set("dotGrid",       map(noise(yoff+rArray[11]), 0, 1, 0, 100));
+  // patterns.set("dotGrid",       map(noise(yoff+rArray[11]), 0, 1, 0, 100));
 }
 
 void makePDF() {
