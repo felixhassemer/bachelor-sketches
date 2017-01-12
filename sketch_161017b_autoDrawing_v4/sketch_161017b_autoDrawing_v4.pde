@@ -105,7 +105,7 @@ void draw() {
 
 
   // Sound einfügen
-  float soundTarget = map(amp.analyze(), 0, 0.5, 0, 220);
+  float soundTarget = map(amp.analyze(), 0, 0.5, 0, 216);
   float dSound = soundTarget - objSize;
   // easing
   objSize += dSound * sizeEasing;

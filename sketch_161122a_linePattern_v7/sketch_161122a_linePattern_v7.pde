@@ -69,7 +69,7 @@ void setup() {
   if (pdfRender) {
     frameRate(3000);
   } else {
-    frameRate(200);
+    frameRate(25);
   }
 
   // FloatDict init
