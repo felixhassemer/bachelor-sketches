@@ -374,11 +374,8 @@ void horizontLines() {
 
   int lineMax = int(random(3, 6));
   // PATTERN
-  choose = 0;
-  if (choose == 0) {
-    for (int i = 1; i <= lineMax; i++) {
+  for (int i = 1; i <= lineMax; i++) {
       line(x+sOff , y+i*uH/(lineMax+1), x+uW-sOff, y+i*uH/(lineMax+1));
-    }
   }
 }
 
@@ -465,9 +462,9 @@ void circle() {
     noFill();
     stroke(sColor);
     strokeWeight(sWeight);
+    strokeCap(sCap);
+    strokeJoin(sJoin);
   }
-  strokeCap(sCap);
-  strokeJoin(sJoin);
 
   // PATTERN
   if (choose == 0) {
@@ -475,8 +472,8 @@ void circle() {
       circleSize = random(uW/8, uW);
     } else {
       circleSize = random(uH/8, uH);
-      ellipse(x+uW/2, y+uH/2, circleSize, circleSize);
     }
+    ellipse(x+uW/2, y+uH/2, circleSize, circleSize);
   } else {
     // set arc to 180 degrees
     float arcStart =  radians(0);
