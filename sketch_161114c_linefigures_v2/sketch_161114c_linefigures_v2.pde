@@ -7,6 +7,12 @@ int lnNumMax = 7;
 int cycle;
 int choose;
 
+// Variabeln für Farben
+color fCol = color(0);
+color bgndCol = color(0);
+color sCol = color(255);
+
+
 // Variabeln Units
 int x, y;
 int gridOffset = 25;
@@ -15,11 +21,12 @@ int uHeight = 50;
 
 void setup() {
   size(1000, 1000);
+  // fullScreen();
   noFill();
   stroke(0);
   strokeWeight(2);
   strokeJoin(ROUND);
-  background(255);
+  background(bgndCol);
   frameRate(30);
 }
 
@@ -37,12 +44,12 @@ void drawShapes() {
 
   lnNumber = int(random(lnNumMin, lnNumMax));
   noStroke();
-  fill(255);
+  fill(fCol);
   rectMode(CENTER);
   rect(x + uWidth/2, y + uHeight/2, uWidth + gridOffset/2, uHeight + gridOffset/2);
   noFill();
 
-  stroke(0);
+  stroke(sCol);
   beginShape();
   for (int i = 0; i < lnNumber; i++) {
     cycle = round(random(0, 1));
@@ -74,7 +81,7 @@ void drawShapes() {
 
   // Kreis zeichnen
   int circleSize = round(random(uWidth/6, uWidth - uWidth/3));
-  fill(255);
+  fill(fCol);
   ellipse(x + random(circleSize/2, uWidth - circleSize/2),
           y + random(circleSize/2, uHeight - circleSize/2),
           circleSize, circleSize);
