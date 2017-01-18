@@ -1,3 +1,5 @@
 images/
 build/
 *.mp3
+*.pdf
+Thumbs.db
