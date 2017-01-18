@@ -9,12 +9,12 @@ int rMod;
 int offset = 2;
 
 void setup() {
-  size(800, 800);
+  size(550, 800);
   background(235, 245, 51);
   frameRate(10);
   noStroke();
   fill(0);
-  image = loadImage("vanessa.jpg");
+  image = loadImage("kopf.jpg");
   image.resize(0, 800);
 }
 

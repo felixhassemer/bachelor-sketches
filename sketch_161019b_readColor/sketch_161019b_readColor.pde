@@ -28,10 +28,9 @@ void draw() {
     image(photo, 0, 0);
     photo.resize(1000, 1000);
   } else {
-    // translateColor();
     pixelate();
   }
-  // pixelate();
+  // translateColor();
 }
 
 //---------------------------------------------
@@ -60,7 +59,7 @@ void translateColor() {
 }
 
 void pixelate() {
-  image(photo, 0, 0);
+  // image(photo, 0, 0);
   photo.resize(1200, 0);
   loadPixels();
   if (keyPressed == true && key == '-') {

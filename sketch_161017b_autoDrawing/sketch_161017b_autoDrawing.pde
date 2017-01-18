@@ -49,7 +49,7 @@ void draw() {
   // }
 
   if ((keyPressed == true) && (key == 's')) {
-    saveFrame("box_circle-#####.png");
+    saveFrame("/images/box_circle-######.png");
   }
 
   if (mousePressed == true) {

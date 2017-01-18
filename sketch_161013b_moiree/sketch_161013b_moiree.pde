@@ -1,7 +1,7 @@
 void setup() {
   size(1000, 1000);
   background(0);
-  frameRate(2);
+  frameRate(30);
 }
 
 int j = 1;
@@ -11,13 +11,14 @@ void draw() {
 
   // lade das Pixelarray
   loadPixels();
-  if (j < 100) {
+  if (j < 1000) {
     j = j + 1;
     for (int i=0; i<1000*1000; i += j) {
       pixels[i] = color(255);
     }
   }
   updatePixels();
+  saveFrame("/data/moiree-####.png");
 }
 
 // // Farbe eines einzelnen Pixels definieren

@@ -1,7 +1,7 @@
 void setup() {
   size(1000, 1000);
   background(153, 37, 68);
-  frameRate(60);
+  frameRate(30);
   colorMode(RGB);
   noFill();
   stroke(59, 181, 155);
@@ -15,4 +15,5 @@ void draw() {
       arc(i, j, 130, 130, radians(mouseX), radians(mouseY), OPEN);
     }
   }
+  saveFrame("/data/arcs-######.png");
 }

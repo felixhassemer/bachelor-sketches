@@ -1,9 +1,9 @@
 void setup() {
   size(1000, 1000);
-  background(150);
+  background(255);
   fill(255);
   noStroke();
-  frameRate(2);
+  frameRate(10);
 }
 
 void draw() {
@@ -16,4 +16,5 @@ void draw() {
   rect(random(1000), random(1000), random(600), random(600));
   fill(150, 104);
   // rect(0, 0, 1000, 1000);
+  saveFrame("rects-######.png");
 }
