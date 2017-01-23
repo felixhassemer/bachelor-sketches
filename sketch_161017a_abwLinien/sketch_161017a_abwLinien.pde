@@ -18,7 +18,6 @@ void draw() {
   if (countVal <= 250) {
     stroke(255);
     line(100, random(800)+100, 900, random(800)+100);
-    line
   } else {
     stroke(0);
     line(random(800)+100, 100, random(800)+100, 900);
