@@ -69,7 +69,7 @@ void pixelate() {
   }
 
   distVar = mouseX/6;
-  if (distVar > 0){
+  if (mouseDist > 0){
     for (int i = 0; i < 1000; i += distVar) {
       for (int j = 0; j < 1000; j += distVar) {
         c1 = photo.get(i, j);

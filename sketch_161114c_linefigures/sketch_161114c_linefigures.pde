@@ -34,9 +34,9 @@ void draw() {
           choose = round(random(0, 1));
           if (choose == 0) {
             x = 0;
-            } else {
+          } else {
               x = 100;
-            }
+          }
           y = round(random(100));
         } else {
           // y = zufällig entweder 0 oder 100

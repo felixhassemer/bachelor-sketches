@@ -1,8 +1,6 @@
 // Easing!!!
 // wichtig
 
-PGraphics pg;
-
 void setup() {
   size(1000, 1000);
   background(255);
