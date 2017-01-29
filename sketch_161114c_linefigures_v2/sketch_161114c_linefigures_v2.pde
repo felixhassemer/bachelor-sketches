@@ -59,7 +59,7 @@ void drawShapes() {
       if (choose == 0) {
         xTemp = 0;
       } else {
-        xTemp = uWidth;
+        xTemp = uWidth; 
       }
       yTemp = round(random(uHeight));
     } else {

@@ -14,7 +14,7 @@ void draw() {
   y = random(height);
   stroke(255);
   point(x, y);
-  if (x < width){
+  if (x < width-5){
     x++;
   } else {
     copy(0, 0, width, height, -1, 0, width, height);

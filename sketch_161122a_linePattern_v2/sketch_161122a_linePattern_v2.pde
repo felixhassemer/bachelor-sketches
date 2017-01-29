@@ -44,16 +44,13 @@ void draw() {
     y += uHeight;
     uWidth = round(random(uWmin, uWmax));
     uHeight = round(random(uHmin, uHmax));
-    println(uWidth, uHeight);
   }
   // Seite zurücksetzen
   if (y + uHeight >= height) {
     y = 0;
-    saveFile();
+    // saveFile();
     background(bgndColor);
   }
-
-  // saveFile();
 }
 
 // ----------------------------------------------------------

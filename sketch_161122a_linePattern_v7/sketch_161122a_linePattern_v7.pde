@@ -1,8 +1,8 @@
 // LIBRARIES
 import processing.pdf.*;
 int pageCount = 0;
-int pageMax = 100;
-boolean pdfRender = false;
+int pageMax = 99;
+boolean pdfRender = true;
 PGraphicsPDF pdf;
 
 // VARIABELN
@@ -31,10 +31,10 @@ float sineInc = PI/14;
 float scaleVal = 0;
 
 // UNITS
-float uWmin = 10;
-float uWmax = 140;
-float uHmin = 10;
-float uHmax = 160;
+float uWmin = 30;
+float uWmax = 600;
+float uHmin = 30;
+float uHmax = 600;
 float uW = round(random(uWmin, uWmax));
 float uH = round(random(uHmin, uHmax));
 
@@ -42,7 +42,7 @@ float uH = round(random(uHmin, uHmax));
 color sColor = color(0),
       fColor = color(0),
       bgndColor = color(255);
-float sWeight = 3;
+float sWeight = 9;
 float sOff = sWeight/2; // used for offsetting strokes
 int sCap = ROUND;
 int sJoin = ROUND;
@@ -52,7 +52,7 @@ int sJoin = ROUND;
 
 void settings() {
   if (pdfRender) {
-    size(1900, 1080, PDF, "linepattern_v7.pdf");
+    size(4961, 7016, PDF, "linepattern_v7_A2.pdf");
   } else {
     // size(1200, 800);
     fullScreen();
@@ -189,17 +189,17 @@ void chooseFunction() {
 }
 
 void setPatternNoise() {
-  patterns.set("triangleDraw",  map(noise(yoff+rArray[0]), 0, 1, 0, 100));
+  // patterns.set("triangleDraw",  map(noise(yoff+rArray[0]), 0, 1, 0, 100));
   // patterns.set("cross",         map(noise(yoff+rArray[1]), 0, 1, 0, 100));
-  patterns.set("horizontLines", map(noise(yoff+rArray[2]), 0, 1, 0, 100));
-  patterns.set("triangleDraw",  map(noise(yoff+rArray[3]), 0, 1, 0, 100));
+  // patterns.set("horizontLines", map(noise(yoff+rArray[2]), 0, 1, 0, 100));
+  // patterns.set("triangleDraw",  map(noise(yoff+rArray[3]), 0, 1, 0, 100));
   patterns.set("circle",        map(noise(yoff+rArray[4]), 0, 1, 0, 100));
   patterns.set("diagLine2",     map(noise(yoff+rArray[5]), 0, 1, 0, 100));
   patterns.set("diagLine",      map(noise(yoff+rArray[6]), 0, 1, 0, 100));
   patterns.set("curves",        map(noise(yoff+rArray[7]), 0, 1, 0, 100));
   patterns.set("space",         map(noise(yoff+rArray[8]), 0, 1, 0, 100));
   patterns.set("lineFigures",   map(noise(yoff+rArray[9]), 0, 1, 0, 100));
-  patterns.set("sineWave",      map(noise(yoff+rArray[10]), 0, 1, 0, 100));
+  // patterns.set("sineWave",      map(noise(yoff+rArray[10]), 0, 1, 0, 100));
   // patterns.set("dotGrid",       map(noise(yoff+rArray[11]), 0, 1, 0, 100));
 }
 
