@@ -1,7 +1,7 @@
 // LIBRARIES
 import processing.pdf.*;
 int pageCount = 0;
-int pageMax = 99;
+int pageMax = 5;
 boolean pdfRender = true;
 PGraphicsPDF pdf;
 
@@ -10,7 +10,7 @@ int choose = 0;
 float[] rArray;
 boolean foundOne;
 int x = 0, y = 0;
-int padding = 150;
+int padding = 0;
 
 // ARRAY
 FloatDict patterns;
@@ -52,7 +52,7 @@ int sJoin = ROUND;
 
 void settings() {
   if (pdfRender) {
-    size(4961, 7016, PDF, "linepattern_v7_A2.pdf");
+    size(3060, 4320, PDF, "linepattern_v7_printer.pdf");
   } else {
     // size(1200, 800);
     fullScreen();

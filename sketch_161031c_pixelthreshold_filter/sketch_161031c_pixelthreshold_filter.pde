@@ -34,7 +34,7 @@ void pixVerarbeitung() {
       rMod = round(random(-offset, offset));
       c = image.get(x, y);
       grayValue = 255-brightness(c);
-      fill(201, 31, 118);
+      fill(0);
       ellipse(x+rMod, y+rMod, grayValue/40, grayValue/40);
     }
   }
