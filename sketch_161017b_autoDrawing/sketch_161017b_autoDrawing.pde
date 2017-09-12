@@ -67,6 +67,15 @@ void draw() {
   drawGif(interval);
 }
 
+void keyPressed() {
+  if (key == 's') {
+    saveFrame("/images/box_circle-######.png");
+  } else if (key == 'g') {
+    gif.finish();
+    println("gif saved!");
+  }
+}
+
 void initGif(int quality) {
   gif = new GifMaker(this, "export.gif", quality);
   gif.setRepeat(0);
@@ -77,15 +86,5 @@ void drawGif(int step) {
   if (frameCount % step == 0) {
     gif.setDelay(1);
     gif.addFrame();
-  }
-}
-
-
-void keyPressed() {
-  if (key == 's') {
-    saveFrame("/images/box_circle-######.png");
-  } else if (key == 'g') {
-    gif.finish();
-    println("gif saved!");
   }
 }
