@@ -1,3 +1,9 @@
+// import libraries
+import gifAnimation.*;
+GifMaker gif;
+int interval = 1;
+color bgnd = color(0, 0, 0);
+
 
 // Variabeln für Linienkonstrukt
 int xTemp, yTemp;
@@ -20,21 +26,21 @@ int uWidth = 50;
 int uHeight = 50;
 
 void setup() {
-  size(1000, 1000);
-  // fullScreen();
+  size(400, 400);
+  // noSmooth();
+  frameRate(2);
   noFill();
   stroke(0);
   strokeWeight(2);
   strokeJoin(ROUND);
   background(bgndCol);
-  frameRate(30);
+  initGif(20, bgnd);
 }
 
 void draw() {
-  // background(255);
   translate(uWidth/4, uHeight/4);
   drawShapes();
-  // saveFrame("linefigures-###.jpg");
+  drawGif(interval);
 }
 
 // ----------------------------------------------------------
@@ -59,7 +65,7 @@ void drawShapes() {
       if (choose == 0) {
         xTemp = 0;
       } else {
-        xTemp = uWidth; 
+        xTemp = uWidth;
       }
       yTemp = round(random(uHeight));
     } else {
@@ -99,5 +105,24 @@ void drawShapes() {
     y = 0;
     // background(255);
   }
+}
 
+void keyPressed() {
+  if (key == 's') {
+    gif.finish();
+    println("gif saved!");
+  }
+}
+
+void initGif(int quality, color transparency) {
+  gif = new GifMaker(this, "export.gif", quality);
+  gif.setRepeat(0);
+  gif.setTransparent(transparency);
+}
+
+void drawGif(int step) {
+  if (frameCount % step == 0) {
+    gif.setDelay(1);
+    gif.addFrame();
+  }
 }
