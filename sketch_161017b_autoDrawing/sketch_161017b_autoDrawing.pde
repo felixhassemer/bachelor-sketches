@@ -1,6 +1,10 @@
 // Easing!!!
 // wichtig
 
+// import gif library
+import gifAnimation.*;
+GifMaker gif;
+
 // Globale Variabeln festlegen
 float i = 0;
 float j = 0;
@@ -9,27 +13,30 @@ float easing = 0.01;
 // Variabeln für neuen zufälligen Wert
 float randomX = 500;
 float randomY = 500;
-int countVal = 1;
 
 
 void setup() {
-  size(1000, 1000);
+  size(400, 400);
   i = width/2;
   j = height/2;
   background(255);
-  frameRate(100);
+  frameRate(60);
   strokeWeight(1);
   fill(255);
   rectMode(CENTER);
+
+  // init gif
+  gif = new GifMaker(this, "export.gif", 5);
+  gif.setRepeat(0);
+  gif.setTransparent(255, 255, 255);
 }
 
 //-----------------------------------------------------------
 
 void draw() {
-  countVal = countVal % 120;
-  if (countVal == 1) {
-    randomX = random(800)+100;
-    randomY = random(800)+100;
+  if (frameCount % 60 == 0) {
+    randomX = random(300)+50;
+    randomY = random(300)+50;
   }
 
   float targetX = randomX;
@@ -40,16 +47,6 @@ void draw() {
   float dy = targetY -i;
   i += dy * easing;
 
-  // Intervall für outlines (alle x frames)
-  // if (countVal % 2 == 1) {
-  //   stroke(0);
-  // } else {
-  //   stroke(255);
-  // }
-
-  if ((keyPressed == true) && (key == 's')) {
-    saveFrame("/images/box_circle-######.png");
-  }
 
   if (mousePressed == true) {
     ellipse(i, j, mouseX/10, mouseY/10);
@@ -62,7 +59,19 @@ void draw() {
     background(255);
   }
 
+  // gif functions
+  if (frameCount % 12 == 0) {
+    gif.setDelay(1);
+    gif.addFrame();
+  }
+}
 
-  // increment
-  countVal ++;
+
+void keyPressed() {
+  if (key == 's') {
+    saveFrame("/images/box_circle-######.png");
+  } else if (key == 'g') {
+    gif.finish();
+    println("gif saved!");
+  }
 }
