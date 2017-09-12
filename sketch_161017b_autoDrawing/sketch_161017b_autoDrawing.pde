@@ -1,17 +1,6 @@
 // Easing!!!
 // wichtig
 
-void setup() {
-  size(1000, 1000);
-  background(255);
-  frameRate(100);
-  strokeWeight(1);
-  fill(255);
-  rectMode(CENTER);
-}
-
-//-----------------------------------------------------------
-
 // Globale Variabeln festlegen
 float i = 0;
 float j = 0;
@@ -21,6 +10,18 @@ float easing = 0.01;
 float randomX = 500;
 float randomY = 500;
 int countVal = 1;
+
+
+void setup() {
+  size(1000, 1000);
+  i = width/2;
+  j = height/2;
+  background(255);
+  frameRate(100);
+  strokeWeight(1);
+  fill(255);
+  rectMode(CENTER);
+}
 
 //-----------------------------------------------------------
 
